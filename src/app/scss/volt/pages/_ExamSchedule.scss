@@ -1,0 +1,27 @@
+.layout-container-body.exam
+{
+    background-color: white;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+    .exam-item
+    {
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        justify-content: space-between;
+        &:first-child
+        {
+            padding-top: 20px;
+        }
+        .time-exam
+        {
+            flex: 0 0 20%;
+            text-align: center;
+            font-weight: bold;
+        }
+        .content-exam
+        {
+            flex: 0 0 70%;
+        }
+    }
+}

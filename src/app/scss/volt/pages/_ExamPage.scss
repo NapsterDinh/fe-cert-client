@@ -1,0 +1,75 @@
+.layout-container-body
+{
+    &.exam
+    {
+        margin-top: 0px;
+        margin-right: 20px;
+        .sticky-sidebar
+        {
+            padding-top: 10px;
+        }
+    }
+}
+.layout-container-top
+{
+    flex: 0 0 75%;
+    &.exam
+    {
+        .make-full,.test-now, .practice-now
+        {
+            border-radius: 30px;
+            padding: 10px 30px;
+        }
+        .exam-description
+        {
+            padding: 0px 30px;
+        }
+        h1
+        {
+            font-weight: 900;
+            margin-bottom: 40px;
+        }
+        button.test-now
+        {
+            margin: 20px auto;
+        }
+        p.practice-below
+        {
+            font-weight: 900;
+        }
+        ul
+        {
+            list-style-type: none;
+            padding-left: 0px;
+            .practice-item
+            {
+                margin-bottom: 30px;
+                padding-bottom: 30px;
+                border-bottom: solid 1px #e2e8f0;
+                h5, .practice-weight, .practice-count-question
+                {
+                    font-weight: 900;
+                    line-height: 43px;
+                }
+                h5
+                {
+                    padding: 0px 30px;
+                }
+                .practice-item-top
+                {
+                    margin: 0px 30px 20px 30px;
+                    padding: 10px 0px;
+                    border-bottom: solid 1px #e2e8f0;
+                }
+                .md-contents
+                {
+                    padding: 0px 30px;
+                }
+                &:last-child
+                {
+                    border: none;
+                }
+            }
+        }
+    }
+}

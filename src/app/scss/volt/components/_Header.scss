@@ -1,0 +1,81 @@
+.navbar
+{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+    .container-header
+    {
+        width: 100%;
+        max-width: calc(100vw - 340px);
+        display: flex;
+        flex-wrap: inherit;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 auto;
+    }
+    #responsive-navbar-nav
+    {
+        width: 80%;
+        .nav-link
+        {
+            font-weight: 700;
+            color: #22313F;
+            font-size: 18px;
+            margin-right: 20px;
+            &.active
+            {
+                color: #2F6BFF;
+                position: relative;
+                &::before
+                {
+                    content: "";
+                    position: absolute;
+                    width: 50%;
+                    height: 2px;
+                    left: 25%;
+                    bottom: 10%;
+                    background-color: #2F6BFF;
+                }
+            }
+        }
+        .mb-3.input-group
+        {
+            margin-top: 15px;
+            margin-right: 20px;
+            svg
+            {
+                position: absolute;
+                background-color: transparent;
+                border-color: transparent;
+                top: 30%;
+                left: 3%;
+                cursor: pointer;
+            }
+            input
+            {
+                position: relative;
+                background-color: transparent;
+                width: 0px;
+                transition: width 0.2s ease-in-out;
+                border-radius: 20px;
+                padding-left: -30px;
+                border: none;
+                cursor: pointer;
+                &:focus
+                {
+                    outline: none;
+                    border-color: #ced4da;
+                    width: 300px;
+                    padding-left: 40px;
+                    cursor: text;
+                }
+            }
+            button
+            {
+                border-radius: 20px;
+                margin-left: 30px;
+                padding: 0px 30px;
+                font-weight: 700;
+            }
+        }
+    }
+}

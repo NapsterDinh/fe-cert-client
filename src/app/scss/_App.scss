@@ -1,0 +1,84 @@
+// =========================================================
+// * Volt React Dashboard
+// =========================================================
+
+// * Product Page: https://themesberg.com/product/dashboard/volt-react
+// * Copyright 2021 Themesberg (https://www.themesberg.com)
+// * Official Repository: https://github.com/themesberg/volt-react-dashboard
+// * License: MIT License (https://themesberg.com/licensing)
+
+// * Designed and coded by https://themesberg.com
+
+// =========================================================
+
+// * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800&display=swap');
+
+// Bootstrap mixins and functions
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/functions";
+
+// Change variables here
+@import "volt/variables";
+
+// Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
+
+// Vendor
+@import "volt/vendor";
+
+// volt mixins & functions
+@import "volt/mixins";
+@import "volt/functions";
+
+// Utilities
+@import "volt/reboot";
+@import "volt/utilities";
+
+// Layout
+@import "volt/layout";
+
+// Components
+@import "volt/components";
+
+@import "app/scss/volt/_pages";
+
+
+// write your custom styles here!
+:root
+{
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+#root
+{
+    position: relative;
+}
+.scroll-top
+{
+    position: fixed;
+    z-index: 999999;
+    width: 50px;
+    height: 50px;
+    font-size: 50px;
+    bottom: 5%;
+    right: 2%;
+}
+a
+{
+    &:hover
+    {
+        color: #f05123;
+    }
+}
+
+.container-card
+{
+    background-color: white;
+    padding: 40px 40px;
+    border-radius: 10px;
+    margin-top: 60px;
+    max-width: 1400px;
+}
+
+

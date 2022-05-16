@@ -1,0 +1,31 @@
+.LearningPathGroup_wrapper__PqkfS
+{
+    margin-bottom: 40px;
+    h2
+    {
+        color: #242424;
+        font-size: 36px;
+        font-weight: 900;
+        margin-bottom: 20px;
+    }
+    svg
+    {
+        font-size: 36px;
+        padding-top: 4px;
+    }
+    .title-container
+    {
+        cursor: pointer;
+        &:hover
+        {
+            h2, svg
+            {
+                color: #f05123;
+            }
+        }
+    }
+    .LearningPathGroup_desc__SnXOr {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+}
