@@ -1,24 +1,67 @@
 import React, { useState, useEffect } from 'react';
-
+import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Table, Button, Container } from '@themesberg/react-bootstrap';
-import { schedule } from 'app/data/schdule';
+import { schedule } from 'app/data/schedule';
+import { BootyPagination } from 'app/components/ScheduleTable';
+import { LoadingTable } from 'app/components/PreloaderNoProps'
+
+
 
 const SchedulePage = () => {
-    const [ data, setData] = useState([])
-    const [ location, setLocation ] = useState([])
+    const [data, setData] = useState([])
+    const [location, setLocation] = useState([])
+    const [pending, setPending] = React.useState(true);
 
     useEffect(() => {
-        setData(schedule)
-        let temp = []
-        temp = [...schedule].map(item => {return item.location})
-        setLocation(Array.from(new Set(temp)))
+        const timeout = setTimeout(() => {
+            setData(schedule)
+            let temp = []
+            temp = [...schedule].map(item => { return item.location })
+            setLocation(Array.from(new Set(temp)))
+            setPending(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
     }, [])
 
-    return ( 
+    const columns = [
+        {
+            name: "ID",
+            selector: (row) => row.id,
+            sortable: true
+        },
+        {
+            name: "name",
+            selector: (row) => row.name,
+            sortable: true
+        },
+        {
+            name: "Location",
+            selector: (row) => row.location,
+            sortable: true,
+        },
+        {
+            name: "Date",
+            selector: (row) => row.createdAt,
+            sortable: true,
+        },
+        {
+            button: true,
+            cell: (row, index, column, id) => {
+                const idExam = id.replace('cell-5-', '')
+                const item = data[idExam]
+
+                return(
+                    <a href={`/exams/${item?.slug}`}>View Details</a>
+                )
+            }
+        }
+    ];
+
+    return (
         <Container className='schedule-container container-card'>
             <div className="layout-container-top">
-                <h1 className="title text-center">Schedule examination</h1>
+                <h1 className="title text-center">FE Certification Examination</h1>
                 <div className='filter-action'>
                     <Form.Select aria-label="Select session">
                         <option>Select session</option>
@@ -43,39 +86,18 @@ const SchedulePage = () => {
                 </div>
             </div>
             <div className="layout-container-body">
-            <Table>
-                <thead>
-                    <tr>
-                    <th>#</th>
-                    <th>Session</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        data.map(item => (
-                            <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.sessions}</td>
-                            <td>{item.date}</td>
-                            <td>{item.name}</td>
-                            <td>{item.location}</td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </Table>
-            <div className='d-flex justify-content-center my-3'>
-                <Button variant='primary'>
-                        See more
-                </Button>
+                <DataTable
+                    columns={columns}
+                    data={schedule}
+                    defaultSortFieldID={1}
+                    progressPending={pending}
+                    progressComponent={<LoadingTable />}
+                    pagination
+                    paginationComponent={BootyPagination}
+                />
             </div>
-            
-            </div>
-        </Container> 
-     );
+        </Container>
+    );
 }
- 
-export default SchedulePage ;
+
+export default SchedulePage;

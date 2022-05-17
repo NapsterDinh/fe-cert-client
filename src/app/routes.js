@@ -31,11 +31,11 @@ export const Routes = {
   ResetPassword: { path: "/reset-password", exact: false, name: "Reset Password", element: ResetPassword },
   EmailSent: { path: "/emailSent", exact: false, name: "Email Sent", element: EmailSent },
 
-  SchedulePage: { path: "/schedule", exact: true, name: "Schedule Page", element: SchedulePage },
+  SchedulePage: { path: ["/schedule",'/exams'], exact: true, name: "Examination", element: SchedulePage },
   StudyRoad: { path: "/studyRoad", exact: true, name: "Study Road", element: StudyRoad },
   TopicPage: { path: "/topic/:slugTopic", exact: true, name: "Topic Page", element: TopicPage },
   DocumentPage: { path: "/section/:slugSection", exact: true, name: "Document Page", element: DocumentPage },
-  ExamPage: { path: "/exams/:slugExam", exact: true, name: "Exam Page", element: ExamPage },
+  ExamPage: { path: ["/exams/:slugExam"], exact: true, name: "Exam Page", element: ExamPage },
   DoingQuizPage: { path: ["/exams/:slugExam/attempt","/exams/:slugExam/attempt?question=:orderQuestion"], exact: true, name: "Exam Page", element: DoingQuizPage },
   AnswerQuizPage: { path: ["/exams/:slugExam/attempt/:hashIdExamSession/result","/exams/:slugExam/attempt/:hashIdExamSession/result?question=:orderQuestion"], exact: true, name: "Answer Page", element: AnswerQuizPage },
 

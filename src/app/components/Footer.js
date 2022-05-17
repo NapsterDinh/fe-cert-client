@@ -10,7 +10,7 @@ const Footer = () => {
                 <h4>CONTACT INFORMATION</h4>
                 <div className="footer-block">
                     <span>Hotline KHTT</span>
-                    <span>0248.890.675</span>
+                    <span>032.764.4657</span>
                 </div>
                 <div className="footer-block">
                     <span>Email</span>
