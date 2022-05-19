@@ -3,7 +3,7 @@ export const quiz = {
     "language": "en",
     "exam": {
         "id": 15,
-        "title": "FE Exam 1 (Morning Session)",
+        "title": "String 2017 Morning",
         "description": "This Exam is based on the Morning session of origin FE exam.\nThere would be 80 questions in total, which distribute largely in 3 sections:\n- Technology: 50 questions\n- Management: 10 questions\n- Strategy: 20 questions.\n\nAll questions are in single-choice question type.\nCandidate is considered as \"Passed\" if he/she has more than 60% of right answers, which means more than 48 questions.",
         "time": 9000,
         "totalQuestions": 80,
