@@ -100,8 +100,6 @@ const LoginPage = () =>
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className={errors.username && touched.username && "error"}
-                            minLength={8}
-                            maxLength={16}
                             name="username"
                             />
                             
@@ -125,7 +123,6 @@ const LoginPage = () =>
                               onChange={handleChange}
                               onBlur={handleBlur}
                               className={errors.password && touched.password && "error"}
-                              maxLength={16}
                               />
                             </InputGroup>
                             <ErrorMessage name="password" component="div" className="invalid-feedback"/>

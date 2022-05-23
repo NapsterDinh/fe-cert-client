@@ -1,0 +1,78 @@
+.profile-container {
+  background-color: white;
+}
+.info-container img {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.info-container .avatar-container {
+  z-index: 2;
+  margin-top: -60px;
+}
+
+.profile-content {
+  background-color: #f5f8fb;
+}
+.profile-container .nav-link {
+  padding: 0.8rem 1rem;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  outline: none;
+  box-shadow: none;
+}
+.profile-container .nav-link:hover {
+  background-color: #d9dde2;
+}
+.profile-container .nav-link.active {
+  box-shadow: none;
+  color: #2f6bff;
+  border-bottom: solid 3px #2f6bff;
+}
+.profile-container .nav-link.active:hover {
+  background-color: transparent;
+}
+.profile-content-container {
+  margin-top: 20px;
+}
+
+.td-questions {
+  white-space: pre-wrap !important;
+}
+.btn-group .dropdown-menu.show {
+  transform: translate(-160px, 31px) !important;
+}
+.th-type,
+.th-dateCreated {
+  width: 15%;
+}
+.MuiDataGrid-root {
+  border: none !important;
+  margin-top: 10px;
+}
+
+.table-wrapper.card.border-light {
+  scrollbar-color: #d2d2d2;
+  scrollbar-width: thin;
+  overflow: -moz-scrollbars-vertical;
+}
+
+.table-wrapper.card.border-light::-webkit-scrollbar {
+  width: 20px;
+}
+/* &:hover {
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    } */
+
+.table-wrapper.card.border-light::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.table-wrapper.card.border-light::-webkit-scrollbar-thumb {
+  border: 5px solid transparent;
+  border-radius: 100px;
+  background-color: #d2d2d2;
+  background-clip: content-box;
+}

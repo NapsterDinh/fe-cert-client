@@ -17,8 +17,9 @@ const StudyRoad = React.lazy(() => import("app/pages/StudyRoad"));
 const TopicPage = React.lazy(() => import("app/pages/TopicPage"));
 const DocumentPage = React.lazy(() => import("app/pages/DocumentPage"));
 const ExamPage = React.lazy(() => import("app/pages/ExamPage"));
-const DoingQuizPage = React.lazy(() => import("app/pages/DoingQuiz"));
+const DoingQuizPage = React.lazy(() => import("app/pages/DoingQuiz/DoingQuiz"));
 const AnswerQuizPage = React.lazy(() => import("app/pages/AnswerQuiz"));
+const ProfilePage = React.lazy(() => import("app/pages/ProfilePage/Profile"));
 
 export const Routes = {
   // pages
@@ -35,9 +36,12 @@ export const Routes = {
   StudyRoad: { path: "/studyRoad", exact: true, name: "Study Road", element: StudyRoad },
   TopicPage: { path: "/topic/:slugTopic", exact: true, name: "Topic Page", element: TopicPage },
   DocumentPage: { path: "/section/:slugSection", exact: true, name: "Document Page", element: DocumentPage },
-  ExamPage: { path: ["/exams/:slugExam"], exact: true, name: "Exam Page", element: ExamPage },
-  DoingQuizPage: { path: ["/exams/:slugExam/attempt","/exams/:slugExam/attempt?question=:orderQuestion"], exact: true, name: "Exam Page", element: DoingQuizPage },
-  AnswerQuizPage: { path: ["/exams/:slugExam/attempt/:hashIdExamSession/result","/exams/:slugExam/attempt/:hashIdExamSession/result?question=:orderQuestion"], exact: true, name: "Answer Page", element: AnswerQuizPage },
+  ExamPage: { path: ["/exams/:idExam"], exact: true, name: "Exam Page", element: ExamPage },
+  DoingQuizPage: { path: ["/exams/:idExam/attempt","/exams/:idExam/attempt?question=:orderQuestion"], exact: true, name: "Exam Page", element: DoingQuizPage },
+  AnswerQuizPage: { path: ["/exams/:idExam/attempt/:hashIdExamSession/result",
+  "/exams/:idExam/attempt/:hashIdExamSession/result?question=:orderQuestion"], 
+  exact: true, name: "Answer Page", element: AnswerQuizPage },
+  ProfilePage: { path: ["/user/profile","/user/profile/:idTab" ], exact: true, name: "Your private profile", element: ProfilePage },
 
   HomePage: {
     path: "/",

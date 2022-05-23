@@ -25,12 +25,7 @@ const ForgotPassword = () => {
       if (result?.data?.result) {
         history.push('/emailSent')
       }
-      else
-      {
-        console.log(result?.data?.result?.msg);
-      }
     } catch (error) {
-      console.log(error);
     }
   }
 

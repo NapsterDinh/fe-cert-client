@@ -37,7 +37,6 @@ const Register = () => {
         alert(result.data.message)
       }
     } catch (error) {
-      console.log(error);
     }
   }
   return (

@@ -18,6 +18,7 @@ const ThirdLogin = () => {
     const history = useHistory()
 
     const responseFacebook = async(response) => {
+        console.log(response);
         try {
             const result =  await loginByFacebook({
                 ...response,
@@ -26,7 +27,6 @@ const ThirdLogin = () => {
             if(result.status === 200)
             {
                 //set token
-                console.log(result);
                 configuration.setApiRequestToken(result.data.token)
                 dispatch(updateUser(result.data))
                 if(location?.state !== undefined)
@@ -39,14 +39,13 @@ const ThirdLogin = () => {
                 }
             }
         } catch (error) {
-            console.log(error);
         }
     }
 
     const onSuccess = async(response) => {
+        console.log(response);
         try {
             const result =  await loginByGoogle(response)
-            console.log(response);
             if(result.status === 200)
             {
                 //set token
@@ -62,12 +61,10 @@ const ThirdLogin = () => {
                 }
             }
         } catch (error) {
-            console.log(error);
         }
     }
 
     const onFailure = (response) => {
-        console.log(response);
     }
 
 

@@ -14,7 +14,7 @@ instance.interceptors.request.use(
     const ApiRequestToken  = configuration.getAPIRequestToken();
 
     if (ApiRequestToken) {
-      config.headers.Authorization = `Bearer ${ApiRequestToken?.access?.token}`;
+      config.headers.Authorization = `${ApiRequestToken?.access?.token}`;
       return config;
     }
     return config;

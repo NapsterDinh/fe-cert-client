@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from "react-data-table-component";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Form, Table, Button, Container } from '@themesberg/react-bootstrap';
-import { schedule } from 'app/data/schedule';
+import { Button, Container, Form } from '@themesberg/react-bootstrap';
+import { LoadingTable } from 'app/components/PreloaderNoProps';
 import { BootyPagination } from 'app/components/ScheduleTable';
-import { LoadingTable } from 'app/components/PreloaderNoProps'
-
+import { schedule } from 'app/data/schedule';
+import React, { useEffect, useState } from 'react';
+import DataTable from "react-data-table-component";
+import { getAllExam } from 'app/core/apis/exam';
 
 
 const SchedulePage = () => {
@@ -14,25 +13,29 @@ const SchedulePage = () => {
     const [pending, setPending] = React.useState(true);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setData(schedule)
-            let temp = []
-            temp = [...schedule].map(item => { return item.location })
-            setLocation(Array.from(new Set(temp)))
-            setPending(false);
-        }, 2000);
-        return () => clearTimeout(timeout);
+        (async () => {
+            try {
+                const response = await getAllExam()
+                setData(response?.data?.exam?.filter(item => item.isPublic === 'Public'))
+                let temp = []
+                temp = [...response?.data?.exam].map(item => { return item.location })
+                setLocation(Array.from(new Set(temp)))
+                setPending(false);
+            } catch (error) {
+
+            }
+        })()
     }, [])
 
     const columns = [
         {
             name: "ID",
-            selector: (row) => row.id,
+            selector: (row) => row._id,
             sortable: true
         },
         {
-            name: "name",
-            selector: (row) => row.name,
+            name: "Title",
+            selector: (row) => row.title,
             sortable: true
         },
         {
@@ -42,17 +45,14 @@ const SchedulePage = () => {
         },
         {
             name: "Date",
-            selector: (row) => row.createdAt,
+            selector: (row) => new Date(row.eventDate).toLocaleDateString(),
             sortable: true,
         },
         {
             button: true,
             cell: (row, index, column, id) => {
-                const idExam = id.replace('cell-5-', '')
-                const item = data[idExam]
-
-                return(
-                    <a href={`/exams/${item?.slug}`}>View Details</a>
+                return (
+                    <a href={`/exams/${row?._id}`}>View Details</a>
                 )
             }
         }
@@ -88,7 +88,7 @@ const SchedulePage = () => {
             <div className="layout-container-body">
                 <DataTable
                     columns={columns}
-                    data={schedule}
+                    data={data}
                     defaultSortFieldID={1}
                     progressPending={pending}
                     progressComponent={<LoadingTable />}

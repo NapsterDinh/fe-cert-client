@@ -4,11 +4,12 @@ import * as momment from 'moment'
 import configuration from 'app/configuration';
 import { useDispatch } from 'react-redux';
 import { updateUser } from 'app/store/userReducer';
+import { BannerAnswerQuiz } from 'app/components/Banner/Banner' 
 
 //components
 import Header from 'app/components/Header';
 import Footer from 'app/components/Footer';
-import Banner from 'app/components/Banner';
+import Banner from 'app/components/Banner/Banner';
 
 const RouteWithLoader = ({ component: Component, ...rest }) => {
     return (
@@ -62,7 +63,11 @@ export const RouteWithSidebarNeedLogin = ({ component: Component, ...rest }) => 
               <div className="App">
                 <Header/>
                 <div className='main-app gray'>
-                <Component {...props} />
+                  {
+                    rest?.name === "Answer Page" &&
+                    <BannerAnswerQuiz />
+                  }
+                <Component {...props} {...rest}/>
                 </div>
                 <Footer/>
               </div>

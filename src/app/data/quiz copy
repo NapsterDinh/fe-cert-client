@@ -1972,7 +1972,7 @@ export const quiz = {
             ]
         }
     ],
-    "createdAt": 1651461394,
+    "startTime": 1651461394,
     "result": null,
     "isTimeout": false
 }
@@ -2350,7 +2350,7 @@ export const quiz2 = {
             "question_id": 3826
         }
     ],
-    "createdAt": 1651973439,
+    "startTime": 1651973439,
     "result": null,
     "isTimeout": false
 }
@@ -5186,70 +5186,7 @@ export const quizResult = {
             ]
         }
     ],
-    "createdAt": 1651973439,
+    "startTime": 1651973439,
     "result": "failed",
     "isTimeout": false
 }
-
-export const listTestResult = [
-    {
-        id: '1',
-        title: 'fe1',
-        mode: 'Exam',
-        results: 'Pass',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    },
-    {
-        id: '2',
-        title: 'fe1',
-        mode: 'Practice',
-        results: 'Pass',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    },
-    {
-        id: '3',
-        title: 'fe1',
-        mode: 'Exam',
-        results: 'Failed',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    },
-    {
-        id: '4',
-        title: 'fe1',
-        mode: 'Exam',
-        results: 'Pass',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    },
-    {
-        id: '5',
-        title: 'fe1',
-        mode: 'Exam',
-        results: 'Failed',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    },
-    {
-        id: '6',
-        title: 'fe1',
-        mode: 'Exam',
-        results: 'Failed',
-        numberCorrectAnswer: 0,
-        totalAnswer: 80,
-        numberTest: 1,
-        createdAt: '21/05/2022 22:36:12'
-    }
-]

@@ -12,7 +12,6 @@ const TopicPage = () => {
 
     useEffect(() => {
         let temp = [...topics]
-        console.log(temp.find(item => item.slug === `/${slugTopic}`));
         setData(temp.find(item => item.slug === `/${slugTopic}`))
     }, [])
 

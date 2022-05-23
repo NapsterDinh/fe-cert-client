@@ -1,13 +1,17 @@
-import React, {  Suspense } from 'react'
-import { BrowserRouter, Route, Switch} from 'react-router-dom'
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import 'app/scss/_App.scss'
+import "app/scss/_App.scss";
 
 //components
-import RouteWithLoader, {RouteWithSidebar, RouteBasicPage, RouteWithSidebarNeedLogin} from 'app/utils/routeConfig'
+import RouteWithLoader, {
+  RouteWithSidebar,
+  RouteBasicPage,
+  RouteWithSidebarNeedLogin,
+} from "app/utils/routeConfig";
 import PreloaderNoProps from "app/components/PreloaderNoProps";
-import { Routes } from 'app/routes'
-import ScrollTop from 'app/components/ScrollTop'
+import { Routes } from "app/routes";
+import ScrollTop from "app/components/ScrollTop";
 
 function App() {
   return (
@@ -23,7 +27,7 @@ function App() {
             name={Routes.LoginPage.name}
           />
 
-            <RouteBasicPage
+          <RouteBasicPage
             exact={Routes.Register.exact}
             path={Routes.Register.path}
             component={Routes.Register.element}
@@ -107,14 +111,27 @@ function App() {
             component={Routes.HomePage.element}
             name={Routes.HomePage.name}
           />
-          
+
+          <RouteWithSidebarNeedLogin
+            exact={Routes.ProfilePage.exact}
+            path={Routes.ProfilePage.path}
+            component={Routes.ProfilePage.element}
+            name={Routes.ProfilePage.name}
+          />
 
           <Route component={Routes.NotFoundPage.element} />
-          <Route exact={Routes.LockPage.exact} path={Routes.LockPage.path} component={Routes.LockPage.element} />
-          <Route exact={Routes.ServerErrorPage.exact} path={Routes.ServerErrorPage.path} component={Routes.ServerErrorPage.element} />
+          <Route
+            exact={Routes.LockPage.exact}
+            path={Routes.LockPage.path}
+            component={Routes.LockPage.element}
+          />
+          <Route
+            exact={Routes.ServerErrorPage.exact}
+            path={Routes.ServerErrorPage.path}
+            component={Routes.ServerErrorPage.element}
+          />
         </Switch>
       </Suspense>
-
     </BrowserRouter>
   );
 }

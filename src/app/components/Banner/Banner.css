@@ -1,0 +1,83 @@
+.banner-answer {
+  color: white;
+}
+.banner-answer .banner-answer-container
+{
+    padding: 40px 20px;
+}
+.banner-answer h2{
+    color: white;
+    max-width: 85%;
+    font-weight: bold;
+}
+p.description
+{
+    max-width: 65%;
+}
+.banner-answer pre
+{
+    white-space: pre-line;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 65%;
+    border: solid 1px white;
+    white-space: pre-line;
+}
+p.maximum-test
+{
+    color: #fc8181 ;
+}
+p.requirement
+{
+    color: yellow;
+    font-weight: 700;
+}
+.circle
+{
+    border-radius: 50%;
+    border: solid 10px white;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content-circle
+{
+    text-align: center;
+}
+.content-circle h1
+{
+    color: white;
+    font-weight: 900;
+}
+
+.content-circle h2
+{
+    color: yellow;
+    font-weight: 900;
+}
+
+.banner-answer svg
+{
+    font-size: 40px;
+    cursor: pointer;
+}
+.banner-answer svg:hover
+{
+    color: yellow;
+}
+.col-right-answer-exam
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-15%);
+}
+
+@media (min-width: 1200px) {
+  .banner-answer .banner-answer-container{
+    max-width: 1450px;
+  }
+}
