@@ -119,6 +119,13 @@ function App() {
             name={Routes.ProfilePage.name}
           />
 
+          <RouteWithSidebar
+            exact={Routes.PracticePage.exact}
+            path={Routes.PracticePage.path}
+            component={Routes.PracticePage.element}
+            name={Routes.PracticePage.name}
+          />
+
           <Route component={Routes.NotFoundPage.element} />
           <Route
             exact={Routes.LockPage.exact}

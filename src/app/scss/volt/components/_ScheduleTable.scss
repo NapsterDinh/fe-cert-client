@@ -8,12 +8,11 @@
   font-weight: 700;
   border-top: 0;
 }
-.rdt_TableRow:nth-child(even) {
+.rdt_TableRow:nth-of-type(even) {
   background-color: rgba(46, 54, 80, 0.05);
 }
-.rdt_TableRow:hover
-{
-    background-color: rgba(14, 76, 140, 0.05);
+.rdt_TableRow:hover {
+  background-color: rgba(14, 76, 140, 0.05);
 }
 .rdt_TableCell div {
   padding: 25px 0;
@@ -21,22 +20,22 @@
 .rdt_TableCell[data-column-id="1"],
 .rdt_TableCol[data-column-id="1"] {
   flex-basis: 10% !important;
-  max-width: 10%!important;
+  max-width: 10% !important;
 }
 .rdt_TableCell[data-column-id="2"],
 .rdt_TableCol[data-column-id="2"] {
   flex-basis: 40% !important;
-  max-width: 40%!important;
+  max-width: 40% !important;
 }
 .rdt_TableCell[data-column-id="3"],
 .rdt_TableCol[data-column-id="3"] {
   flex-basis: 20% !important;
-  max-width: 20%!important;
+  max-width: 20% !important;
 }
 .rdt_TableCell[data-column-id="4"],
 .rdt_TableCol[data-column-id="4"] {
   flex-basis: 20% !important;
-  max-width: 20%!important;
+  max-width: 20% !important;
 }
 .rdt_TableCell[data-column-id="5"],
 .rdt_TableCol[data-column-id="5"] {

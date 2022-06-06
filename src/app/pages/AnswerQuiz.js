@@ -1,16 +1,16 @@
 import { Button, Col, Container, FormCheck } from "@themesberg/react-bootstrap";
-import { getResultByIdUserExam } from "app/core/apis/exam";
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
 import { Alert } from "antd";
-import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
-import { useDispatch, useSelector } from "react-redux";
+import { getResultByIdUserExam } from "app/core/apis/exam";
 import { updateExam } from "app/store/examReducer";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
 const AnswerQuiz = () => {
   const [questionShow, setQuestionShow] = useState("");
   const location = useLocation();
   const dispatch = useDispatch();
+  const [ topic, setTopic ] = useState([])
   const data = useSelector((state) => state.exam.exam);
   const currentOrder =
     new URLSearchParams(location.search).get("question") === null
@@ -27,7 +27,9 @@ const AnswerQuiz = () => {
         setData({
           ...response?.data?.exam.result.exam,
           submissions: response?.data?.exam.newSubmissions,
+          result: response?.data?.exam.result
         });
+        
       } catch (error) {}
     })();
   }, []);

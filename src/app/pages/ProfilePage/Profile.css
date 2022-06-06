@@ -1,10 +1,18 @@
 .profile-container {
   background-color: white;
 }
-.info-container img {
+.info-container .ant-upload-picture-card-wrapper.avatar-uploader .ant-upload {
   width: 250px;
-  height: auto;
-  object-fit: cover;
+  height: 250px;
+  border-radius: 50%;
+}
+.info-container
+  .ant-upload-picture-card-wrapper.avatar-uploader
+  .ant-upload
+  img {
+  width: 246px;
+  height: 245px;
+  margin-top: 7px;
   border-radius: 50%;
 }
 .info-container .avatar-container {

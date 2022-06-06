@@ -187,7 +187,7 @@ const Header = () => {
                       </div>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="user-dropdown dropdown-menu-right mt-2">
-                      <Dropdown.Item className="fw-bold" onClick={() => window.location = '/user/profile'}>
+                      <Dropdown.Item className="fw-bold" onClick={() => window.location = '/user/profile/overview'}>
                         <FontAwesomeIcon icon={faUserCircle} className="me-2" />{" "}
                         My Profile
                       </Dropdown.Item>
