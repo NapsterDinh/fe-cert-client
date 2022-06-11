@@ -1,30 +1,34 @@
 import { Col, Container } from "@themesberg/react-bootstrap";
-import { getCurrentExam, updateAnswer } from "app/core/apis/exam";
+import { updateAnswer } from "app/core/apis/exam";
 import { getCurrentRandomSession } from "app/core/apis/practice";
 import React, { useLayoutEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import DetailQuestion from "../DoingPractice/DetailQuestions";
+import DetailQuestion from "./DetailQuestions";
 import QuestionList from "./QuestionList";
 
-const DoingQuiz = () => {
+const DoingPractice = () => {
   const [data, setData] = useState("");
   const [questionShow, setQuestionShow] = useState("");
   const [submissionArray, setSubmissionArray] = useState([]);
   const [statTime, setStartTime] = useState("");
   const [selected, setSelected] = useState(undefined);
   const location = useLocation();
-  let { idExam, practice } = useParams();
+  let { idPractice } = useParams();
 
   const currentOrder =
     new URLSearchParams(location.search).get("question") === null
       ? 1
       : parseInt(new URLSearchParams(location.search).get("question"));
 
+  const typePratice =
+    new URLSearchParams(location.search).get("type") === null
+      ? 1
+      : new URLSearchParams(location.search).get("type");
+
   const saveSelectedChoice = async (selectedChoice) => {
     if (selectedChoice !== undefined) {
       const submmission = {
-        exam: idExam,
+        exam: idPractice,
         submissions: {
           answers: selectedChoice,
           question_id: questionShow._id,
@@ -46,12 +50,7 @@ const DoingQuiz = () => {
   useLayoutEffect(() => {
     (async () => {
       try {
-        let response = "";
-        if (practice === 0) {
-          response = await getCurrentExam(idExam);
-        } else {
-          response = await getCurrentRandomSession();
-        }
+        const response = await getCurrentRandomSession(typePratice);
         setData(response?.data?.exam.exam);
         setSubmissionArray(response?.data?.exam.submissions);
         setStartTime(response?.data?.exam?.createdAt);
@@ -95,7 +94,7 @@ const DoingQuiz = () => {
       </Col>
       <Col className="layout-container-top quiz">
         <DetailQuestion
-          idExam={idExam}
+          idExam={idPractice}
           item={questionShow}
           saveSelectedChoice={saveSelectedChoice}
           data={data}
@@ -109,4 +108,4 @@ const DoingQuiz = () => {
   );
 };
 
-export default DoingQuiz;
+export default DoingPractice;

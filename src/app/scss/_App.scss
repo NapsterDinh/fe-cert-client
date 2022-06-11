@@ -10,9 +10,9 @@
 // * Designed and coded by https://themesberg.com
 
 // =========================================================
-@import 'antd/dist/antd.css';
+@import "antd/dist/antd.css";
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800&display=swap");
 
 // Bootstrap mixins and functions
 @import "node_modules/bootstrap/scss/mixins";
@@ -43,47 +43,42 @@
 
 @import "app/scss/volt/_pages";
 
-
 // write your custom styles here!
-:root
-{
-    scroll-behavior: smooth;
-    scroll-padding-top: 90px;
+:root {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
 }
-#root
-{
-    position: relative;
+#root {
+  position: relative;
 }
-.scroll-top
-{
-    position: fixed;
-    z-index: 999999;
-    width: 50px;
-    height: 50px;
-    font-size: 50px;
-    bottom: 5%;
-    right: 2%;
+.scroll-top {
+  position: fixed;
+  z-index: 999999;
+  width: 50px;
+  height: 50px;
+  font-size: 50px;
+  bottom: 12%;
+  right: 29px;
+  color: #1890ff;
 }
-a
-{
-    &:hover
-    {
-        color: #f05123;
-    }
+a {
+  &:hover {
+    color: #5caaf3;
+  }
 }
 
-.container-card
-{
-    background-color: white;
-    padding: 40px 40px;
-    border-radius: 10px;
-    margin-top: 60px;
-    max-width: 1400px;
+.container-card {
+  background-color: white;
+  padding: 40px 40px;
+  border-radius: 10px;
+  margin-top: 60px;
+  max-width: 1400px;
 }
-.correct-choice
-{
-    background-color: #32D0A3;
-    border-radius: 15px;
+.correct-choice {
+  background-color: #32d0a3;
+  border-radius: 15px;
 }
-
-
+.ql-align-center
+{
+  text-align: center;
+}

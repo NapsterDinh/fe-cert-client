@@ -59,7 +59,7 @@ p.requirement {
 }
 .col-right-answer-exam {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
@@ -87,10 +87,31 @@ p.requirement {
 .result-report .td-correct-wrong {
   max-width: 100px;
 }
-.result-report .td-correct-wrong .ant-tag.ant-tag-has-color
-{
+.result-report .td-correct-wrong .ant-tag.ant-tag-has-color {
   width: 76.55px;
   text-align: center;
+}
+.banner-pricing .banner-pricing-container {
+  flex-direction: column;
+  color: white;
+}
+
+.banner-pricing .banner-pricing-container h3,
+.banner-pricing .banner-pricing-container h1,
+.banner-pricing .banner-pricing-container p
+{
+  color: white;
+  text-align: center;
+}
+.banner-pricing .banner-pricing-container h1
+{
+  white-space: pre-wrap;
+  font-size: 70px;
+  font-weight: 700;
+}
+.banner-pricing .banner-pricing-container p
+{
+  font-size: 20px;
 }
 
 @media (min-width: 1200px) {

@@ -8,21 +8,17 @@ import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Button,
   Card,
   Col,
   Container,
   ProgressBar,
   Row,
-  Table,
 } from "@themesberg/react-bootstrap";
-import { Modal, Tooltip, Tag } from "antd";
+import { Tooltip, Alert } from "antd";
 import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
-import { trafficShares } from "app/data/charts";
 import InnerHTML from "dangerously-set-html-content";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { CircleChartWidget } from "../Widgets";
 import "./Banner.css";
 
 const Banner = ({ name }) => {
@@ -66,7 +62,6 @@ const Banner = ({ name }) => {
 };
 
 export const BannerAnswerQuiz = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const exam = useSelector((state) => state.exam.exam);
   const totalCorrectAnswer = () => {
     let total = 0;
@@ -79,85 +74,9 @@ export const BannerAnswerQuiz = () => {
     }
     return total;
   };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
 
   return (
     <>
-      <Modal
-        className="modal-result-report"
-        title="Result Report"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Row>
-          <Col className="mb-4" xs={12} sm={6} xl={4}>
-            <div style={{ marginBottom: "20px" }}>
-              <CircleChartWidget
-                title="Segmentation of topics"
-                data={trafficShares}
-              />
-            </div>
-            <ProgressTrackWidget />
-          </Col>
-          <Col xs={12} sm={6} xl={4} className="mb-4">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Result</th>
-                  <th>Question</th>
-                  <th>Topic</th>
-                  <th>Source</th>
-                </tr>
-              </thead>
-              <tbody className="result-report">
-                {exam?.questions?.map((item, index) => {
-                  const temp = exam?.submissions.find(
-                    (t) => item._id === t.question_id
-                  );
-                  let result = "";
-                  if (temp === undefined) {
-                    result = "No Answer";
-                  } else {
-                    if (temp.correct) {
-                      result = "Correct";
-                    } else {
-                      result = "Incorrect";
-                    }
-                  }
-                  return (
-                    <tr key={item._id}>
-                      <td>{index + 1}</td>
-                      <td className="td-correct-wrong">
-                        {result === "No Answer" && (
-                          <Tag color="#108ee9">{result}</Tag>
-                        )}
-                        {result === "Correct" && (
-                          <Tag color="#87d068">{result}</Tag>
-                        )}
-                        {result === "Incorrect" && (
-                          <Tag color="#f50">{result}</Tag>
-                        )}
-                      </td>
-                      <td className="td-question">
-                        <Tooltip title={item.question}>{item.question}</Tooltip>
-                      </td>
-                      <td>@mdo</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-      </Modal>
       <div
         style={{ backgroundImage: `url(${bannerBg})` }}
         className="banner-answer"
@@ -169,11 +88,17 @@ export const BannerAnswerQuiz = () => {
                 <Col lg={9}>
                   <h2>{exam?.title}</h2>
                   <p className="description">{exam?.description}</p>
-                  <InnerHTML html={exam?.content?.toString()} />
-                  <p>Rules:</p>
-                  <p className="maximum-test">
-                    Maximum number of tests: {exam?.maxTotalTests}
-                  </p>
+                  {exam?.content !== undefined && (
+                    <div
+                      style={{
+                        whiteSpace: "pre-line",
+                        color: "white",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html:decodeURIComponent(escape(window.atob(exam?.content))),
+                      }}
+                    ></div>
+                  )}
                   <p className="requirement">{`Requirement: ${Math.round(
                     exam?.questions?.length / 2
                   )}/${exam?.questions?.length}`}</p>
@@ -194,11 +119,6 @@ export const BannerAnswerQuiz = () => {
                         />
                       </Tooltip>
                     </div>
-                  </div>
-                  <div>
-                    <Button onClick={showModal} variant="outlined">
-                      Detail Result Report
-                    </Button>
                   </div>
                 </Col>
               </Container>
@@ -279,4 +199,29 @@ export const ProgressTrackWidget = () => {
   );
 };
 
+export const BannerPricing = () => {
+  return (
+    <>
+      <div
+        style={{ backgroundImage: `url(${bannerBg})` }}
+        className="banner-answer banner-pricing"
+      >
+        <div className="container_common">
+          <div className="content_common">
+            <div className="ifm">
+              <Container className="d-flex banner-answer-container banner-pricing-container">
+                <h3>PRICING</h3>
+                <h1>
+                  Get Started Now, {`\n`}
+                  Pick a Plan Later
+                </h1>
+                <p>Choose a plan that works best for you</p>
+              </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 export default Banner;

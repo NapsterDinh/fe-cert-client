@@ -1,0 +1,64 @@
+.pricing-page-container {
+  margin-top: 60px !important;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1400px !important;
+}
+.pricing-page-container .pricing-item {
+  flex: 0 0 30%;
+}
+.pricing-page-container .pricing-item:hover {
+  margin-top: -20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.pricing-page-container .pricing-item .pricing-item-padding {
+  padding: 40px;
+  background-color: white;
+  box-shadow: 0px 0px 30px 0px rgb(0 0 23 / 20%);
+  z-index: 1;
+}
+.pricing-page-container .pricing-item * {
+  text-align: center;
+}
+.pricing-page-container .pricing-item h1 {
+  font-weight: 700;
+}
+.pricing-page-container .pricing-item h1.price {
+  margin: 30px 0px;
+}
+.pricing-page-container .pricing-item button {
+  width: 100%;
+  border-radius: 0px;
+}
+.pricing-page-container .pricing-item ul {
+  list-style-type: none;
+  padding: 0rem 1.5rem;
+}
+.pricing-page-container .pricing-item ul li {
+  text-align: left;
+}
+.pricing-page-container .pricing-item ul li svg {
+  margin-right: 20px;
+  margin-bottom: 3px;
+  color: green;
+}
+.pricing-page-container .pricing-item ul li svg.untick-icon {
+  color: red;
+}
+.compared-feature-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  background-color: white;
+  margin-top: 60px;
+}
+.compared-feature-container .compared-feature {
+  margin: 40px 0px !important;
+}
+.compared-feature-container h1 {
+  text-align: center;
+  margin-top: 40px;
+}

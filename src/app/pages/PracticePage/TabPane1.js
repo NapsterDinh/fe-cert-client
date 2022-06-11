@@ -2,6 +2,8 @@ import { Checkbox, Divider, Tabs } from "antd";
 import { Button } from "@themesberg/react-bootstrap";
 import React, { useEffect, useState } from "react";
 import "./PracticePage.css";
+import { createPractice } from "app/core/apis/practice";
+import { useHistory } from "react-router-dom";
 const { TabPane } = Tabs;
 
 const CheckboxGroup = Checkbox.Group;
@@ -26,6 +28,7 @@ const TabPane1 = ({ allExam }) => {
   const [optionalItemsChecked, setOptionalItemsChecked] = useState([]);
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
+  const history = useHistory();
 
   const onChangeCheckbox = (list) => {
     setCheckedList(list);
@@ -39,10 +42,21 @@ const TabPane1 = ({ allExam }) => {
     setCheckAll(e.target.checked);
   };
 
-  const startPraticing = () => {
-    console.log(optionalItemsChecked, checkedList);
+  const startPraticing = async () => {
+    try {
+      const response = await createPractice({
+        exams: checkedList,
+      });
+      if (response?.data) {
+        history.push(
+          `/practice/${response?.data?.exam?.exam}/attempt?type=normal_practice`
+        );
+      } else {
+        alert(response.error);
+      }
+    } catch (error) {}
   };
-  
+
   return (
     <>
       <CheckboxGroup
@@ -64,12 +78,12 @@ const TabPane1 = ({ allExam }) => {
       <Divider />
       <div
         data-show="true"
-        class="ant-alert ant-alert-info ant-alert-with-description ant-alert-no-icon"
+        className="ant-alert ant-alert-info ant-alert-with-description ant-alert-no-icon"
         role="alert"
       >
-        <div class="ant-alert-content">
-          <div class="ant-alert-message">Optional Item</div>
-          <div class="ant-alert-description">
+        <div className="ant-alert-content">
+          <div className="ant-alert-message">Optional Item</div>
+          <div className="ant-alert-description">
             <CheckboxGroup
               className="d-flex justify-content-between"
               options={optionalItems}
@@ -80,7 +94,11 @@ const TabPane1 = ({ allExam }) => {
         </div>
       </div>
       <div className="text-center mb-4 my-4">
-        <Button variant="primary" className="make-full">
+        <Button
+          variant="primary"
+          className="make-full"
+          onClick={startPraticing}
+        >
           Start practicing
         </Button>
       </div>

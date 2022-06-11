@@ -1,16 +1,28 @@
-import { Button, Col, Container, FormCheck } from "@themesberg/react-bootstrap";
-import { Alert } from "antd";
+import {
+  Button,
+  Col,
+  Container,
+  FormCheck,
+  Row,
+  Table,
+} from "@themesberg/react-bootstrap";
+import { Alert, Tabs, Tag, Tooltip } from "antd";
 import { getResultByIdUserExam } from "app/core/apis/exam";
 import { updateExam } from "app/store/examReducer";
+import { groupBy } from "app/utils/ArrayUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
+import { CircleChartWidget, ProgressTrackWidget } from "app/components/Widgets";
+import "./AnswerQuiz.css";
+import { getAllTopic } from "app/core/apis/topic";
+const { TabPane } = Tabs;
 
 const AnswerQuiz = () => {
   const [questionShow, setQuestionShow] = useState("");
   const location = useLocation();
+  const [topic, setTopic] = useState([]);
   const dispatch = useDispatch();
-  const [ topic, setTopic ] = useState([])
   const data = useSelector((state) => state.exam.exam);
   const currentOrder =
     new URLSearchParams(location.search).get("question") === null
@@ -24,12 +36,13 @@ const AnswerQuiz = () => {
         const response = await getResultByIdUserExam({
           userExam: hashIdExamSession,
         });
+        const response1 = await getAllTopic();
         setData({
           ...response?.data?.exam.result.exam,
           submissions: response?.data?.exam.newSubmissions,
-          result: response?.data?.exam.result
+          result: response?.data?.exam.result,
         });
-        
+        setTopic(response1?.data?.topic);
       } catch (error) {}
     })();
   }, []);
@@ -82,20 +95,119 @@ const AnswerQuiz = () => {
     }
   }, [location.search]);
 
+  const handleDataTopicChart = () => {
+    const groupByIDTopic = groupBy(data?.questions, "topic");
+    const chartArray = [];
+    Object.entries(groupByIDTopic).map((item, index) => {
+      let temp = { ...item[1] };
+      const result = topic?.find((t) => t._id === item[0]);
+      chartArray.push({
+        ...temp,
+        label: result?.title,
+      });
+    });
+    return chartArray.map((item, index) => {
+      return {
+        id: index + 1,
+        label: item?.label,
+        value: (
+          ((Object.keys(item).length - 1) / data?.questions.length) *
+          100
+        ).toFixed(2),
+        count: Object.keys(item).length - 1,
+        color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+      };
+    });
+  };
+
   return (
     <>
       <Container className="d-flex container-card">
-        <Col className="layout-container-body quiz">
-          <QuestionList data={data} currentOrder={currentOrder} />
-        </Col>
-        <Col className="layout-container-top quiz">
-          <DetailQuestion
-            item={questionShow}
-            currentOrder={currentOrder}
-            data={data}
-            setData={setData}
-          />
-        </Col>
+        <Tabs defaultActiveKey="1" destroyInactiveTabPane className="tabs-answer">
+          <TabPane tab="Detail Answer Quiz" key="1">
+            <Row className="d-flex mt-3">
+              <Col className="layout-container-body answer quiz">
+                <QuestionList data={data} currentOrder={currentOrder} />
+              </Col>
+              <Col className="layout-container-top quiz">
+                <DetailQuestion
+                  item={questionShow}
+                  currentOrder={currentOrder}
+                  data={data}
+                  setData={setData}
+                />
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tab="Answer result statistics" key="2">
+            <Row>
+              <Col className="mb-4" >
+                <div style={{ marginBottom: "20px" }}>
+                  {data !== "" && (
+                    <CircleChartWidget
+                      title="Segmentation of topics"
+                      data={handleDataTopicChart()}
+                    />
+                  )}
+                </div>
+                <ProgressTrackWidget />
+              </Col>
+              <Col className="mb-4">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Result</th>
+                      <th>Question</th>
+                      <th>Topic</th>
+                    </tr>
+                  </thead>
+                  <tbody className="result-report">
+                    {data?.questions?.map((item, index) => {
+                      const temp = data?.submissions.find(
+                        (t) => item._id === t.question_id
+                      );
+                      let result = "";
+                      if (temp === undefined) {
+                        result = "No Answer";
+                      } else {
+                        if (temp.correct) {
+                          result = "Correct";
+                        } else {
+                          result = "Incorrect";
+                        }
+                      }
+                      return (
+                        <tr key={item._id}>
+                          <td>{index + 1}</td>
+                          <td className="td-correct-wrong">
+                            {result === "No Answer" && (
+                              <Tag color="#108ee9">{result}</Tag>
+                            )}
+                            {result === "Correct" && (
+                              <Tag color="#87d068">{result}</Tag>
+                            )}
+                            {result === "Incorrect" && (
+                              <Tag color="#f50">{result}</Tag>
+                            )}
+                          </td>
+                          <td className="td-question">
+                            <Tooltip title={item.question}>
+                              {item.question}
+                            </Tooltip>
+                          </td>
+                          <td>
+                            {topic?.find((t) => t._id === item.topic)?.title}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+          </TabPane>
+        </Tabs>
       </Container>
     </>
   );
@@ -245,7 +357,10 @@ const DetailQuestion = ({
           >
             Next question
           </Button>
-          <Button onClick={() => window.location = `/exams/${data?._id}`} className="btn-submit">
+          <Button
+            onClick={() => (window.location = `/exams/${data?._id}`)}
+            className="btn-submit"
+          >
             Try Test Again
           </Button>
         </div>

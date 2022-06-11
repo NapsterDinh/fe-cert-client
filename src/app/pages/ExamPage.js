@@ -8,6 +8,7 @@ import {
   createSession,
 } from "app/core/apis/exam";
 import { Alert } from "@themesberg/react-bootstrap";
+import GoogleAdsense from "app/components/GoogleAdsense";
 import { useSelector } from "react-redux";
 
 const ExamPage = () => {
@@ -22,7 +23,15 @@ const ExamPage = () => {
   useEffect(() => {
     (async () => {
       try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
         const response = await getExamById(idExam);
+        if (
+          response.status === 500 ||
+          (response.status === 200 &&
+            response?.data?.exam.exam[0].isPublic === "Private")
+        ) {
+          window.location = "/404";
+        }
         const response1 = await getAllExam();
         const response2 = await checkExamByIdAndUser(idExam, user.id);
         setData(response?.data?.exam.exam[0]);
@@ -56,19 +65,23 @@ const ExamPage = () => {
         <div className="practice-all-exam">
           <h1 className="text-center">{data?.title}</h1>
           <div className="tag-container"></div>
-          <p className="exam-description">{data?.description}</p>
           <Alert key={`info`} variant={`success`}>
-            <pre
-              style={{
-                whiteSpace: "pre-line",
-                color: "#0f5132",
-              }}
-              className="content-description"
-            >
-              {data?.content}
-            </pre>
-            <p>Rules:</p>
-            <p>Maximum number of tests: {data?.maxTotalTests}</p>
+            {data?.content !== undefined && (
+              <div
+                style={{
+                  whiteSpace: "pre-line",
+                  color: "#0f5132",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: decodeURIComponent(
+                    escape(window.atob(data?.content))
+                  ),
+                }}
+              ></div>
+            )}
+
+            {/* <p>Rules:</p>
+            <p>Maximum number of tests: {data?.maxTotalTests}</p> */}
           </Alert>
           <div className="text-center">
             {statusDoingExam?.total !== 0 && (
@@ -113,19 +126,20 @@ const ExamPage = () => {
 const ExamList = ({ data, location }) => {
   return (
     <div className="sticky-sidebar">
-      <div class="post-index hidden-sm-down">
-        <div class="section-title-line">
-          <h5 class="text-uppercase">Exam List</h5>
-          <hr class="filler-line"></hr>
+      <div className="post-index hidden-sm-down">
+        <div className="section-title-line">
+          <h5 className="text-uppercase">Exam List</h5>
+          <hr className="filler-line"></hr>
         </div>
+        <GoogleAdsense slot={"5661496343"} />
         <h5>{data?.title}</h5>
-        <ul class="content-outline list-unstyled">
+        <ul className="content-outline list-unstyled">
           {data?.examsList?.map((item, index) => (
             <li
               key={item.id}
-              class="content-outline__item content-outline__item--level-3"
+              className="content-outline__item content-outline__item--level-3"
             >
-              <a href={`#exams-item${index}`} class="link">
+              <a href={`#exams-item${index}`} className="link">
                 {item.title}
               </a>
             </li>
@@ -155,7 +169,7 @@ const PracticeItem = ({ item, index }) => {
         </Button>
       </div>
       <div
-        class="md-contents"
+        className="md-contents"
         dangerouslySetInnerHTML={{ __html: item?.description }}
       ></div>
     </li>

@@ -1,69 +1,44 @@
-.schedule-container
-{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    .layout-container-top
-    {
-        width: 100%;
-        h1
-        {
-            margin: 20px 0px;
-            color: #464646;
-            font-weight: 900;
-        }
-        .filter-action
-        {
-            display: flex;
-            justify-content: space-between;
-            .form-control,
-            .form-select
-            {
-                flex: 0 0 23%;
-                cursor: pointer;
-            }
-        }
+.schedule-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  .layout-container-top {
+    width: 100%;
+    h1 {
+      margin: 20px 0px;
+      color: #464646;
+      font-weight: 900;
     }
-    .layout-container-body
-    {
-        margin-top: 30px;
-        width: 100%;
+    .filter-action {
+      display: flex;
+      justify-content: space-between;
+      .form-control,
+      .form-select {
+        flex: 0 0 23%;
+        cursor: pointer;
+      }
     }
-    button
-    {
-        border-top-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-        padding: 10px 30px;
-        &:last-child
-        {
-            margin-top: 20px;
-        }
+  }
+  .layout-container-body {
+    margin-top: 30px;
+    width: 100%;
+  }
+  thead {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: #262b40;
+    tr {
+      color: white;
+      th {
+        padding: 20px;
+      }
     }
-    thead
-    {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        background: #262B40;
-        tr
-        {
-            color: white;
-            th
-            {
-                padding: 20px;
-            }
-        }
-    }
-    td
-    {
-        padding: 25px 0px;
-        padding-left: 20px;
-    }
-    tr
-    {
-        &:hover
-        {
-            background-color: rgba(14,76,140,.05);
-        }
-
-    }
+  }
+  td {
+    padding: 25px 0px;
+    padding-left: 20px;
+  }
+  .ant-table-thead th.ant-table-column-has-sorters:hover {
+    background-color: #fafafa !important;
+  }
 }

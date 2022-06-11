@@ -14,7 +14,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { createRandomTopicSession } from "app/core/apis/practice";
 import "./PracticePage.css";
+import { useHistory } from "react-router-dom";
 const { Text } = Typography;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -39,8 +41,8 @@ const schema = yup
   })
   .required();
 
-const TabPane2 = ({ dataSampleTopicArray }) => {
-  const [data, setData] = useState([]);
+const TabPane2 = ({ allTopic }) => {
+  const history = useHistory()
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const {
@@ -67,14 +69,14 @@ const TabPane2 = ({ dataSampleTopicArray }) => {
   };
 
   const showModalPracticeOneTopic = (item) => {
-    setValue("objectives", [item.id]);
+    setValue("objectives", [item._id]);
     setIsModalVisible(true);
   };
 
   const showModalAllTopic = () => {
     setValue(
       "objectives",
-      data?.map((item) => item.id)
+      allTopic?.map((item) => item._id)
     );
     setIsModalVisible(true);
   };
@@ -84,9 +86,6 @@ const TabPane2 = ({ dataSampleTopicArray }) => {
     reset();
     setIsModalVisible(false);
   };
-  useEffect(() => {
-    setData(dataSampleTopicArray);
-  }, []);
 
   const handleChange = (time) => {
     if (time) {
@@ -102,10 +101,21 @@ const TabPane2 = ({ dataSampleTopicArray }) => {
     }
   };
 
-  const handlePractice = (values) => {
+  const handlePractice = async (values) => {
+    try {
+      const response = await createRandomTopicSession({
+        topics: values.objectives,
+        numberOfQuestions: values.numberOfQuestions,
+        time: 1200,
+      });
+      if (response?.data) {
+        history.push(`/practice/${response?.data?.exam?.exam}/attempt?type=topic_practice`);
+      } else {
+        alert(response.error);
+      }
+    } catch (error) {}
     console.log(values);
   };
-  console.log(moment("00:20:00", "HH:mm:ss"));
 
   return (
     <>
@@ -146,8 +156,8 @@ const TabPane2 = ({ dataSampleTopicArray }) => {
                       placeholder="Please select"
                       value={getValues("objectives")}
                     >
-                      {data?.map((item) => (
-                        <Option key={item.id}>{item.title}</Option>
+                      {allTopic?.map((item) => (
+                        <Option key={item._id}>{item.title}</Option>
                       ))}
                     </Select>
                     {errors.objectives && (
@@ -217,10 +227,10 @@ const TabPane2 = ({ dataSampleTopicArray }) => {
         </Form>
       </Modal>
       <div className="practice-with-each-section">
-        {data?.map((item, index) => (
+        {allTopic?.map((item, index) => (
           <>
             <PracticeItem
-              key={item.id}
+              key={`PracticeItem${item._id}`}
               item={item}
               index={index}
               showModalPracticeOneTopic={showModalPracticeOneTopic}
@@ -268,7 +278,7 @@ const PracticeItem = ({ item, index, showModalPracticeOneTopic }) => {
             {index + 1}. {item2?.title}
           </h5>
           <div
-            class="md-contents"
+            className="md-contents"
             dangerouslySetInnerHTML={{ __html: item?.description }}
           ></div>
           <ul>

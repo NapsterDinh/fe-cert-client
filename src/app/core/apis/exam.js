@@ -1,6 +1,9 @@
 import { _get, _post } from "./apis";
 
-export const getAllExam = () => {
+export const getAllExam = (type) => {
+  if (type !== undefined) {
+    return _get(`/api/v1/exam/list?type=${type}`);
+  }
   return _get("/api/v1/exam/list");
 };
 

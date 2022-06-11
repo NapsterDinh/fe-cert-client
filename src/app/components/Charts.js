@@ -66,7 +66,7 @@ export const SalesValueChartphone = () => {
 };
 
 export const CircleChart = (props) => {
-  const { series = [], donutWidth = 20 } = props;
+  const { series = [], donutWidth = 50 } = props;
   const sum = (a, b) => a + b;
 
   const options = {
@@ -77,11 +77,12 @@ export const CircleChart = (props) => {
     donutSolid: true,
     fullWidth: false,
     showLabel: false,
+      ignoreEmptyValues: false,
     labelInterpolationFnc: value => `${Math.round(value / series.reduce(sum) * 100)}%`,
   }
 
   const plugins = [
-    ChartistTooltip()
+    ChartistTooltip({ appendToBody: true })
   ]
 
   return (

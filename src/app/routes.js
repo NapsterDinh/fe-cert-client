@@ -18,13 +18,22 @@ const EmailSent = React.lazy(() => import("app/pages/BasicPage/EmailSent"));
 
 //main page
 const HomePage = React.lazy(() => import("app/pages/HomePage/HomePage"));
-const SchedulePage = React.lazy(() => import("app/pages/SchedulePage"));
+const SchedulePage = React.lazy(() => import("app/pages/SchedulePage/SchedulePage"));
 const StudyRoad = React.lazy(() => import("app/pages/StudyRoad"));
 const TopicPage = React.lazy(() => import("app/pages/TopicPage"));
 const DocumentPage = React.lazy(() => import("app/pages/DocumentPage"));
 const ExamPage = React.lazy(() => import("app/pages/ExamPage"));
 const DoingQuizPage = React.lazy(() => import("app/pages/DoingQuiz/DoingQuiz"));
-const AnswerQuizPage = React.lazy(() => import("app/pages/AnswerQuiz"));
+const AnswerQuizPage = React.lazy(() =>
+  import("app/pages/AnswerQuiz/AnswerQuiz")
+);
+const AnswerPracticePage = React.lazy(() =>
+  import("app/pages/AnswerPractice/AnswerPractice")
+);
+const DoingPracticePage = React.lazy(() =>
+  import("app/pages/DoingPractice/DoingPractice")
+);
+
 const ProfilePage = React.lazy(() => import("app/pages/ProfilePage/Profile"));
 const OverviewPage = React.lazy(() =>
   import("app/pages/ProfilePage/OverviewPage/OverviewPage")
@@ -32,6 +41,11 @@ const OverviewPage = React.lazy(() =>
 const PracticePage = React.lazy(() =>
   import("app/pages/PracticePage/PracticePage")
 );
+const PricingPage = React.lazy(() =>
+  import("app/pages/PricingPage/PricingPage")
+);
+
+const CheckoutPage = React.lazy(() => import("app/pages/Checkout/Checkout"));
 
 export const Routes = {
   // pages
@@ -118,6 +132,16 @@ export const Routes = {
     name: "Exam Page",
     element: DoingQuizPage,
   },
+  DoingPracticePage: {
+    path: [
+      "/practice/:idPractice/attempt?type=:type",
+      "/practice/:idPractice/attempt",
+      "/practice/:idPractice/attempt?question=:orderQuestion",
+    ],
+    exact: true,
+    name: "Practice Page",
+    element: DoingPracticePage,
+  },
   AnswerQuizPage: {
     path: [
       "/exams/:idExam/attempt/:hashIdExamSession/result",
@@ -126,6 +150,15 @@ export const Routes = {
     exact: true,
     name: "Answer Page",
     element: AnswerQuizPage,
+  },
+  AnswerPracticePage: {
+    path: [
+      "/practice/:idPractice/attempt/:hashIdExamSession/result",
+      "/practice/:idPractice/attempt/:hashIdExamSession/result?question=:orderQuestion",
+    ],
+    exact: true,
+    name: "Answer Practice Page",
+    element: AnswerPracticePage,
   },
   ProfilePage: {
     path: ["/user/profile", "/user/profile/:idTab"],
@@ -144,6 +177,18 @@ export const Routes = {
     exact: true,
     name: "Practice Page",
     element: PracticePage,
+  },
+  PricingPage: {
+    path: ["/pricing"],
+    exact: true,
+    name: "Pricing Page",
+    element: PricingPage,
+  },
+  CheckoutPage: {
+    path: ["/checkout/:idServicePack"],
+    exact: true,
+    name: "Checkout Page",
+    element: CheckoutPage,
   },
 
   HomePage: {

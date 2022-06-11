@@ -99,10 +99,24 @@ function App() {
           />
 
           <RouteWithSidebarNeedLogin
+            exact={Routes.DoingPracticePage.exact}
+            path={Routes.DoingPracticePage.path}
+            component={Routes.DoingPracticePage.element}
+            name={Routes.DoingPracticePage.name}
+          />
+
+          <RouteWithSidebarNeedLogin
             exact={Routes.AnswerQuizPage.exact}
             path={Routes.AnswerQuizPage.path}
             component={Routes.AnswerQuizPage.element}
             name={Routes.AnswerQuizPage.name}
+          />
+
+          <RouteWithSidebarNeedLogin
+            exact={Routes.AnswerPracticePage.exact}
+            path={Routes.AnswerPracticePage.path}
+            component={Routes.AnswerPracticePage.element}
+            name={Routes.AnswerPracticePage.name}
           />
 
           <RouteWithSidebar
@@ -119,11 +133,24 @@ function App() {
             name={Routes.ProfilePage.name}
           />
 
+          <RouteWithSidebarNeedLogin
+            exact={Routes.CheckoutPage.exact}
+            path={Routes.CheckoutPage.path}
+            component={Routes.CheckoutPage.element}
+            name={Routes.CheckoutPage.name}
+          />
+
           <RouteWithSidebar
             exact={Routes.PracticePage.exact}
             path={Routes.PracticePage.path}
             component={Routes.PracticePage.element}
             name={Routes.PracticePage.name}
+          />
+          <RouteWithSidebar
+            exact={Routes.PricingPage.exact}
+            path={Routes.PricingPage.path}
+            component={Routes.PricingPage.element}
+            name={Routes.PricingPage.name}
           />
 
           <Route component={Routes.NotFoundPage.element} />

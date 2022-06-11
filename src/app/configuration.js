@@ -11,4 +11,6 @@ const configuration = {
   }
 };
 
+export const serverURL = 'http://localhost:300'
+
 export default configuration;
