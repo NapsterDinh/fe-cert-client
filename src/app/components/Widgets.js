@@ -27,6 +27,7 @@ import {
   ListGroup,
   ProgressBar,
 } from "@themesberg/react-bootstrap";
+import { Progress as ProgressAntd } from "antd";
 import {
   CircleChart,
   BarChart,
@@ -130,11 +131,11 @@ export const CounterWidget = (props) => {
               <h5>{category}</h5>
               <h3 className="mb-1">{title}</h3>
             </div>
-            <small>
+            {/* <small>
               {period}, <FontAwesomeIcon icon={faGlobeEurope} size="xs" />{" "}
               WorldWide
-            </small>
-            <div className="small mt-2">
+            </small> */}
+            {/* <div className="small mt-2">
               <FontAwesomeIcon
                 icon={percentageIcon}
                 className={`${percentageColor} me-1`}
@@ -143,7 +144,7 @@ export const CounterWidget = (props) => {
                 {percentage}%
               </span>{" "}
               Since last month
-            </div>
+            </div> */}
           </Col>
         </Row>
       </Card.Body>
@@ -155,7 +156,7 @@ export const CircleChartWidget = (props) => {
   const { title, data = [] } = props;
   const series = data.map((d) => ({
     value: d.value,
-    meta: d.label
+    meta: d.label,
   }));
 
   return (
@@ -291,9 +292,19 @@ export const TeamMembersWidget = () => {
   );
 };
 
-export const ProgressTrackWidget = () => {
+export const ProgressTrackWidget = ({
+  data,
+  titleProgress = "Progress track",
+}) => {
   const Progress = (props) => {
-    const { title, percentage, icon, color, last = false } = props;
+    const {
+      title,
+      percentage,
+      color,
+      last = false,
+      countCorrect,
+      total,
+    } = props;
     const extraClassName = last ? "" : "mb-2";
 
     return (
@@ -307,11 +318,17 @@ export const ProgressTrackWidget = () => {
           <div className="progress-wrapper">
             <div className="progress-info">
               <h6 className="mb-0">{title}</h6>
-              <small className="fw-bold text-dark">
-                <span>{percentage} %</span>
-              </small>
+              <span>
+                {countCorrect} correct / {total} questions
+              </span>
             </div>
-            <ProgressBar variant={color} now={percentage} min={0} max={100} />
+            <ProgressAntd
+              strokeColor={{
+                "0%": color,
+                "100%": color,
+              }}
+              percent={percentage}
+            />
           </div>
         </Col>
       </Row>
@@ -321,40 +338,12 @@ export const ProgressTrackWidget = () => {
   return (
     <Card border="light" className="shadow-sm">
       <Card.Header className="border-bottom border-light">
-        <h5 className="mb-0">Progress track</h5>
+        <h5 className="mb-0">{titleProgress}</h5>
       </Card.Header>
       <Card.Body>
-        <Progress
-          title="Rocket - SaaS Template"
-          color="purple"
-          icon={faBootstrap}
-          percentage={34}
-        />
-        <Progress
-          title="Pixel - Design System"
-          color="danger"
-          icon={faAngular}
-          percentage={60}
-        />
-        <Progress
-          title="Spaces - Listings Template"
-          color="tertiary"
-          icon={faVuejs}
-          percentage={45}
-        />
-        <Progress
-          title="Stellar - Dashboard"
-          color="info"
-          icon={faReact}
-          percentage={35}
-        />
-        <Progress
-          last
-          title="Volt - Dashboard"
-          color="purple"
-          icon={faBootstrap}
-          percentage={34}
-        />
+        {data?.map((item) => (
+          <Progress key={item.title + "progress"} {...item} />
+        ))}
       </Card.Body>
     </Card>
   );

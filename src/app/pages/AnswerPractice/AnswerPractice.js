@@ -7,15 +7,20 @@ import {
   Table,
 } from "@themesberg/react-bootstrap";
 import { Alert, Tabs, Tag, Tooltip } from "antd";
+import Chart from "app/components/Chart/Chart";
+import { ProgressTrackWidget } from "app/components/Widgets";
 import { getResultByIdUserExam } from "app/core/apis/exam";
+import { getAllTopic } from "app/core/apis/topic";
 import { updateExam } from "app/store/examReducer";
-import { groupBy } from "app/utils/ArrayUtils";
+import {
+  countAnswerRatePerTopic,
+  countPercentAnswerRate,
+  countPercentTopicInExam,
+} from "app/utils/ArrayUtils";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { CircleChartWidget, ProgressTrackWidget } from "app/components/Widgets";
-import "./AnswerQuiz.css";
-import { getAllTopic } from "app/core/apis/topic";
+import "./AnswerPractice.css";
 const { TabPane } = Tabs;
 
 const AnswerPractice = () => {
@@ -39,6 +44,19 @@ const AnswerPractice = () => {
         const response1 = await getAllTopic();
         setData({
           ...response?.data?.exam.result.exam,
+          questions: response?.data?.exam.result?.exam?.questions
+            ?.filter((t) =>
+              response?.data?.exam.newSubmissions?.some(
+                (u) => u.question_id === t._id
+              )
+            )
+            .map((item) => ({
+              ...item,
+              question: decodeURIComponent(escape(window.atob(item?.question))),
+              explanation: decodeURIComponent(
+                escape(window.atob(item?.explanation))
+              ),
+            })),
           submissions: response?.data?.exam.newSubmissions,
           result: response?.data?.exam.result,
         });
@@ -95,31 +113,6 @@ const AnswerPractice = () => {
     }
   }, [location.search]);
 
-  const handleDataTopicChart = () => {
-    const groupByIDTopic = groupBy(data?.questions, "topic");
-    const chartArray = [];
-    Object.entries(groupByIDTopic).map((item, index) => {
-      let temp = { ...item[1] };
-      const result = topic?.find((t) => t._id === item[0]);
-      chartArray.push({
-        ...temp,
-        label: result?.title,
-      });
-    });
-    return chartArray.map((item, index) => {
-      return {
-        id: index + 1,
-        label: item?.label,
-        value: (
-          ((Object.keys(item).length - 1) / data?.questions.length) *
-          100
-        ).toFixed(2),
-        count: Object.keys(item).length - 1,
-        color: "#" + Math.floor(Math.random() * 16777215).toString(16),
-      };
-    });
-  };
-
   return (
     <>
       <Container className="d-flex container-card">
@@ -146,15 +139,34 @@ const AnswerPractice = () => {
           <TabPane tab="Answer result statistics" key="2">
             <Row>
               <Col className="mb-4">
+                <div style={{ marginBottom: "20px", marginTop: "20px" }}>
+                  <h3>Topic division</h3>
+                  <Chart
+                    width={450}
+                    {...countPercentTopicInExam(data?.questions, topic)}
+                  />
+                </div>
                 <div style={{ marginBottom: "20px" }}>
-                  {data !== "" && (
-                    <CircleChartWidget
-                      title="Segmentation of topics"
-                      data={handleDataTopicChart()}
+                  <h3>Answer rate</h3>
+                  <Chart
+                    width={450}
+                    {...countPercentAnswerRate(
+                      data?.questions,
+                      data?.submissions
+                    )}
+                  />
+                </div>
+                {data?.questions !== undefined &&
+                  topic.length !== 0 &&
+                  data?.submissions !== undefined && (
+                    <ProgressTrackWidget
+                      data={countAnswerRatePerTopic(
+                        data?.questions,
+                        topic,
+                        data?.submissions
+                      )}
                     />
                   )}
-                </div>
-                <ProgressTrackWidget />
               </Col>
               <Col className="mb-4">
                 <Table striped bordered hover>
@@ -167,15 +179,15 @@ const AnswerPractice = () => {
                     </tr>
                   </thead>
                   <tbody className="result-report">
-                    {data?.questions?.map((item, index) => {
-                      const temp = data?.submissions.find(
+                    {data?.submissions?.map((item, index) => {
+                      const temp = data?.questions.find(
                         (t) => item._id === t.question_id
                       );
                       let result = "";
-                      if (temp === undefined) {
+                      if (item?.answers === "") {
                         result = "No Answer";
                       } else {
-                        if (temp.correct) {
+                        if (item.correct) {
                           result = "Correct";
                         } else {
                           result = "Incorrect";
@@ -196,12 +208,12 @@ const AnswerPractice = () => {
                             )}
                           </td>
                           <td className="td-question">
-                            <Tooltip title={item.question}>
-                              {item.question}
+                            <Tooltip title={temp.question}>
+                              {temp.question}
                             </Tooltip>
                           </td>
                           <td>
-                            {topic?.find((t) => t._id === item.topic)?.title}
+                            {topic?.find((t) => t._id === temp.topic)?.title}
                           </td>
                         </tr>
                       );

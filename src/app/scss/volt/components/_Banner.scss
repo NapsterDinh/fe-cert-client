@@ -5,7 +5,7 @@
     width: 100%;
     position: relative;
     z-index: 2;
-    height: 250px;
+    height: 400px;
     &.home
     {
         height: 450px;
@@ -15,20 +15,21 @@
         margin: 0 auto;
         height: 100%;
         .content_common{
-            padding: 0 8.3333333333%;
+            padding: 0 3.3333333333%;
             position: relative;
             height: 100%;
             .ifm
             {
                 position: absolute;
-                bottom: 85px;
-                left: 8.3333333333%;
+                bottom: 130px;
+                left: 1.3333333333%;
                 z-index: 99;
                 .name
                 {
                     font-size: 50px;
                     line-height: 54px;
                     letter-spacing: .02em;
+                    font-weight: 700;
                     color: #fff;
                     text-shadow: 0 5px 20px rgb(0 0 0 / 50%);
                 }

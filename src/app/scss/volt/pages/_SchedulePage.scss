@@ -2,21 +2,30 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding: 40px 40px;
+  border-radius: 10px;
+  margin-top: 60px;
+  max-width: 1400px;
   .layout-container-top {
     width: 100%;
     h1 {
       margin: 20px 0px;
       color: #464646;
       font-weight: 900;
+      margin-bottom: 50px !important;
     }
     .filter-action {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 50px;
       .form-control,
       .form-select {
         flex: 0 0 23%;
         cursor: pointer;
       }
+    }
+    .button-search {
+      padding: 10px 40px;
     }
   }
   .layout-container-body {

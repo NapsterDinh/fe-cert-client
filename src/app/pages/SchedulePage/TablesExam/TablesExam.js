@@ -3,7 +3,6 @@ import { Card } from "@themesberg/react-bootstrap";
 import { Button, Input, Space, Table, Tag } from "antd";
 import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { serverURL } from "app/configuration";
 import "./TableExam.css";
 import { useHistory } from "react-router-dom";
 
@@ -117,16 +116,6 @@ export const TableExam = ({ data }) => {
   });
   const columns = [
     {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-      width: "5%",
-      align: "center",
-      ...getColumnSearchProps("type"),
-      sorter: (a, b) => a.type < b.type,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
       title: "Title",
       dataIndex: "title",
       key: "title",
@@ -134,6 +123,53 @@ export const TableExam = ({ data }) => {
       sorter: (a, b) => a.title < b.title,
       sortDirections: ["descend", "ascend"],
       ...getColumnSearchProps("title"),
+    },
+    {
+      title: "Session",
+      dataIndex: "isSessionMorning",
+      key: "isSessionMorning",
+      width: "5%",
+      sorter: (a, b) => a.isSessionMorning < b.isSessionMorning,
+      sortDirections: ["descend", "ascend"],
+      render: (isSessionMorning) => {
+        return <span>{isSessionMorning}</span>;
+      },
+      filters: [
+        {
+          text: "Morning",
+          value: "Morning",
+        },
+        {
+          text: "Afternoon",
+          value: "Afternoon",
+        },
+      ],
+      onFilter: (value, record) => record.isSessionMorning.indexOf(value) === 0,
+    },
+    {
+      title: "Event Date",
+      dataIndex: "eventDate",
+      key: "eventDate",
+      width: "10%",
+      sorter: (a, b) =>
+        new Date(a.eventDate).toLocaleDateString() <
+        new Date(b.eventDate).toLocaleDateString(),
+      sortDirections: ["descend", "ascend"],
+      defaultSortOrder: "descend",
+      render: (eventDate) => {
+        return <span>{new Date(eventDate).toLocaleDateString()}</span>;
+      },
+      filters: data
+        ?.map((item, index) => ({
+          key: `eventDate${index}`,
+          text: new Date(item.eventDate).getFullYear(),
+          value: new Date(item.eventDate).getFullYear(),
+        }))
+        .filter(
+          (value, index, self) =>
+            self.findIndex((item) => item.value === value.value) === index
+        ),
+      onFilter: (value, record) => record.eventDate.indexOf(value) === 0,
     },
     {
       title: "Last Updated",

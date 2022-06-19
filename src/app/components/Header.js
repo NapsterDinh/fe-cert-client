@@ -1,38 +1,24 @@
 // import { Navbar, InputGroup, Nav, Image, Button, FormControl } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Divider, message, Upload, Avatar } from "antd";
+import { generateAvatar } from 'app/utils/StringUtils'
 import {
-  Form,
-  Dropdown,
-  ListGroup,
-  Navbar,
-  InputGroup,
-  Nav,
-  Image,
   Button,
+  Dropdown,
+  Image,
+  Nav,
+  Navbar,
 } from "@themesberg/react-bootstrap";
-
+import logo from "app/assets/icon/Logo.png";
+import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
+import configuration from "app/configuration";
 import NOTIFICATIONS_DATA from "app/data/notifications";
 import { updateUser } from "app/store/userReducer";
-import configuration from "app/configuration";
-
-import {
-  faBell,
-  faCog,
-  faEnvelopeOpen,
-  faSearch,
-  faSignOutAlt,
-  faUserShield,
-} from "@fortawesome/free-solid-svg-icons";
-import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
-import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
-import logo from "app/assets/icon/Logo.png";
-import Notification from "./Notification";
-
-import { logout } from "app/core/apis/user";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const user = useSelector((state) => state.persist.user?.user);
@@ -77,7 +63,7 @@ const Header = () => {
               className="nav-link"
               activeClassName="active"
             >
-              Study Road
+              Learning path
             </NavLink>
             <NavLink
               to={"/exams"}
@@ -89,15 +75,12 @@ const Header = () => {
             >
               Exam
             </NavLink>
-            <NavLink to={"/pricing"} className="nav-link" activeClassName="active">
-              Pricing
-            </NavLink>
             <NavLink
-              to={"/discussion"}
+              to={"/pricing"}
               className="nav-link"
               activeClassName="active"
             >
-              Discussion
+              Pricing
             </NavLink>
             <NavLink
               to={"/practice"}
@@ -138,7 +121,7 @@ const Header = () => {
                 </>
               ) : (
                 <Nav className="align-items-center">
-                  <Dropdown as={Nav.Item} onToggle={markNotificationsAsRead}>
+                  {/* <Dropdown as={Nav.Item} onToggle={markNotificationsAsRead}>
                     <Dropdown.Toggle
                       as={Nav.Link}
                       className="text-dark icon-notifications me-lg-3"
@@ -168,17 +151,27 @@ const Header = () => {
                         </Dropdown.Item>
                       </ListGroup>
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   <Dropdown as={Nav.Item}>
                     <Dropdown.Toggle as={Nav.Link} className="pt-1 px-0">
                       <div className="media d-flex align-items-center">
-                        <Image
+                        <Avatar
+                          className="avatar-header"
+                          size={45}
+                          style={{
+                            color: "#f56a00",
+                            backgroundColor: "#fde3cf",
+                          }}
+                        >
+                          {generateAvatar(user?.name)}
+                        </Avatar>
+                        {/* <Image
                           src={
                             user?.avatar === undefined ? Profile3 : user?.avatar
                           }
                           className="user-avatar md-avatar rounded-circle"
-                        />
+                        /> */}
                         <div className="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                           <span className="mb-0 font-small fw-bold">
                             {user?.name}
@@ -187,11 +180,16 @@ const Header = () => {
                       </div>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="user-dropdown dropdown-menu-right mt-2">
-                      <Dropdown.Item className="fw-bold" onClick={() => window.location = '/user/profile/overview'}>
+                      <Dropdown.Item
+                        className="fw-bold"
+                        onClick={() =>
+                          (window.location = "/user/profile/overview")
+                        }
+                      >
                         <FontAwesomeIcon icon={faUserCircle} className="me-2" />{" "}
                         My Profile
                       </Dropdown.Item>
-                      <Dropdown.Item className="fw-bold">
+                      {/* <Dropdown.Item className="fw-bold">
                         <FontAwesomeIcon icon={faCog} className="me-2" />{" "}
                         Settings
                       </Dropdown.Item>
@@ -205,7 +203,7 @@ const Header = () => {
                       <Dropdown.Item className="fw-bold">
                         <FontAwesomeIcon icon={faUserShield} className="me-2" />{" "}
                         Support
-                      </Dropdown.Item>
+                      </Dropdown.Item> */}
 
                       <Dropdown.Divider />
 

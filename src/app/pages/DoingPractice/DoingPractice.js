@@ -51,7 +51,16 @@ const DoingPractice = () => {
     (async () => {
       try {
         const response = await getCurrentRandomSession(typePratice);
-        setData(response?.data?.exam.exam);
+        setData({
+          ...response?.data?.exam.exam,
+          questions: response?.data?.exam.exam?.questions.map((item) => ({
+            ...item,
+            question: decodeURIComponent(escape(window.atob(item?.question))),
+            explanation: decodeURIComponent(
+              escape(window.atob(item?.explanation))
+            ),
+          })),
+        });
         setSubmissionArray(response?.data?.exam.submissions);
         setStartTime(response?.data?.exam?.createdAt);
       } catch (error) {}

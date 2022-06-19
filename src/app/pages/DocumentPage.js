@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { Col, Container } from "@themesberg/react-bootstrap";
+import { Breadcrumb, PageHeader } from "antd";
+import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
+import { getLessonByID } from "app/core/apis/lessons";
+import React, { useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
-import { Container, Col } from "@themesberg/react-bootstrap";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import { topics } from "app/data/topic";
-
+import { useLocation, useParams, useHistory } from "react-router-dom";
 const dataTest = {
   currentSection: {
     id: "111",
@@ -621,36 +619,92 @@ const TutorialPage = () => {
   const [data, setData] = useState("");
   const { slugSection } = useParams();
   const location = useLocation();
-
+  const history = useHistory();
   useEffect(() => {
-    setData(dataTest);
+    (async () => {
+      try {
+        const response = await getLessonByID(slugSection);
+        const temp = response?.data?.topicLesson[0];
+        if (response?.status === 200) {
+          if (temp?.status === undefined || temp?.status === "private") {
+            window.location = "/404";
+          } else {
+            setData(temp);
+          }
+        }
+      } catch (error) {
+        alert(error);
+      }
+    })();
   }, []);
 
   return (
-    <Container className="d-flex container-card">
-      <Col className="layout-container-top tutorial">
-        <div>
-          <h1>{data?.currentSection?.title}</h1>
-          <div
-            className="body-content"
-            dangerouslySetInnerHTML={{ __html: data?.currentSection?.body }}
-          ></div>
+    <>
+      <div
+        className={"pageBanner_def"}
+        style={{ backgroundImage: `url(${bannerBg})` }}
+      >
+        <div className="container_common">
+          <div className="content_common">
+            <div className="ifm">
+              <>
+                <Col span={18}>
+                  <PageHeader
+                    className="site-page-header"
+                    title={data?.title}
+                    breadcrumbRender={() => (
+                      <Breadcrumb>
+                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                          <a href="/studyRoad">Learning Path</a>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                          <span
+                            onClick={() => history.goBack()}
+                            style={{ cursor: "pointer" }}
+                          >
+                            Topic
+                          </span>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>Lesson</Breadcrumb.Item>
+                      </Breadcrumb>
+                    )}
+                  />
+                </Col>
+              </>
+            </div>
+          </div>
         </div>
-        <span className="span-reserved">Hope you enjoying my website</span>
-        <div className="border"></div>
-        <div className="next-article">
+      </div>
+      <Container className="d-flex container-card">
+        <Col className="layout-container-top tutorial">
+          <div>
+            <h1>{data?.title}</h1>
+            {data?.body !== undefined && (
+              <div
+                className="body-content"
+                dangerouslySetInnerHTML={{
+                  __html: decodeURIComponent(escape(window.atob(data?.body))),
+                }}
+              ></div>
+            )}
+          </div>
+          <span className="span-reserved">Hope you enjoying my website</span>
+          <div className="border"></div>
+          {/* <div className="next-article">
           <div>
             <p>Next section</p>
             <a href={`/section${data?.nextSection?.slug}`}>
               {data?.nextSection?.title}
             </a>
           </div>
-        </div>
-      </Col>
-      <Col className="layout-container-body tutorial">
-        <PostIndex data={data} location={location} />
-      </Col>
-    </Container>
+        </div> */}
+        </Col>
+        <Col className="layout-container-body tutorial">
+          <PostIndex data={data} location={location} />
+        </Col>
+      </Container>
+    </>
   );
 };
 
@@ -658,16 +712,16 @@ const PostIndex = ({ data, location }) => {
   return (
     <div className="sticky-sidebar">
       <div className="post-index hidden-sm-down">
-        <div className="section-title-line">
+        {/* <div className="section-title-line">
           <h5 className="text-uppercase">Tables of content</h5>
           <hr className="filler-line"></hr>
-        </div>
+        </div> */}
         <ul className="content-outline list-unstyled">
           {data?.currentSection?.postIndex?.map((item, index) => (
             <li className="content-outline__item content-outline__item--level-3">
               <a
                 href={`#${item.id}`}
-                class={
+                className={
                   location.hash !== `#${item.id}`
                     ? index === 0 && location.hash === ""
                       ? `link active`

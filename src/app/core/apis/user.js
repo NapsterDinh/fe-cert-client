@@ -36,3 +36,8 @@ export const resetPass = (data) => {
 export const deleteUser = (data) => {
   return _delete("/api/v1/user");
 };
+
+export const getTopicStatistic = (type) => {
+  return _get("/api/v1/exam/topic/statistic?type="+type);
+};
+

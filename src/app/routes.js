@@ -18,11 +18,13 @@ const EmailSent = React.lazy(() => import("app/pages/BasicPage/EmailSent"));
 
 //main page
 const HomePage = React.lazy(() => import("app/pages/HomePage/HomePage"));
-const SchedulePage = React.lazy(() => import("app/pages/SchedulePage/SchedulePage"));
+const SchedulePage = React.lazy(() =>
+  import("app/pages/SchedulePage/SchedulePage")
+);
 const StudyRoad = React.lazy(() => import("app/pages/StudyRoad"));
 const TopicPage = React.lazy(() => import("app/pages/TopicPage"));
 const DocumentPage = React.lazy(() => import("app/pages/DocumentPage"));
-const ExamPage = React.lazy(() => import("app/pages/ExamPage"));
+const ExamPage = React.lazy(() => import("app/pages/ExamPage/ExamPage"));
 const DoingQuizPage = React.lazy(() => import("app/pages/DoingQuiz/DoingQuiz"));
 const AnswerQuizPage = React.lazy(() =>
   import("app/pages/AnswerQuiz/AnswerQuiz")
@@ -102,17 +104,17 @@ export const Routes = {
   StudyRoad: {
     path: "/studyRoad",
     exact: true,
-    name: "Study Road",
+    name: "Learning path",
     element: StudyRoad,
   },
   TopicPage: {
-    path: "/topic/:slugTopic",
+    path: "/topics/:slugTopic",
     exact: true,
     name: "Topic Page",
     element: TopicPage,
   },
   DocumentPage: {
-    path: "/section/:slugSection",
+    path: "/lessons/:slugSection",
     exact: true,
     name: "Document Page",
     element: DocumentPage,
@@ -127,6 +129,8 @@ export const Routes = {
     path: [
       "/exams/:idExam/attempt",
       "/exams/:idExam/attempt?question=:orderQuestion",
+      "/practice/:idPractice/attempt",
+      "/practice/:idPractice/attempt?question=:orderQuestion",
     ],
     exact: true,
     name: "Exam Page",
@@ -146,22 +150,24 @@ export const Routes = {
     path: [
       "/exams/:idExam/attempt/:hashIdExamSession/result",
       "/exams/:idExam/attempt/:hashIdExamSession/result?question=:orderQuestion",
+      "/practice/:idPractice/attempt/:hashIdExamSession/result",
+      "/practice/:idPractice/attempt/:hashIdExamSession/result?question=:orderQuestion",
     ],
     exact: true,
     name: "Answer Page",
     element: AnswerQuizPage,
   },
-  AnswerPracticePage: {
-    path: [
-      "/practice/:idPractice/attempt/:hashIdExamSession/result",
-      "/practice/:idPractice/attempt/:hashIdExamSession/result?question=:orderQuestion",
-    ],
-    exact: true,
-    name: "Answer Practice Page",
-    element: AnswerPracticePage,
-  },
+  // AnswerPracticePage: {
+  //   path: [
+  //     "/practice/:idPractice/attempt/:hashIdExamSession/result",
+  //     "/practice/:idPractice/attempt/:hashIdExamSession/result?question=:orderQuestion",
+  //   ],
+  //   exact: true,
+  //   name: "Answer Practice Page",
+  //   element: AnswerPracticePage,
+  // },
   ProfilePage: {
-    path: ["/user/profile", "/user/profile/:idTab"],
+    path: ["/user/profile", "/user/profile/:idTab", "/user"],
     exact: true,
     name: "Your private profile",
     element: ProfilePage,

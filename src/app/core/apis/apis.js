@@ -35,37 +35,37 @@ instance.interceptors.response.use(
     const code = error.response.status;
     const config = error.response.config;
 
-    if (code === 401) {
-      (async () => {
-        const ApiRequestToken  = configuration.getAPIRequestToken();
-        const data = await instance.post(`/api/v1/user/refresh`, {
-          refreshToken: ApiRequestToken?.refresh?.token,
-        });
+    // if (code === 401) {
+    //   (async () => {
+    //     const ApiRequestToken  = configuration.getAPIRequestToken();
+    //     const data = await instance.post(`/api/v1/user/refresh`, {
+    //       refreshToken: ApiRequestToken?.refresh?.token,
+    //     });
 
-        if (data?.data) {
-          if (!data?.data?.token) {
-            configuration.setApiRequestToken("");
-            window.location.href = "/login";
-            return;
-          }
+    //     if (data?.data) {
+    //       if (!data?.data?.token) {
+    //         configuration.setApiRequestToken("");
+    //         window.location.href = "/login";
+    //         return;
+    //       }
 
-          configuration.setApiRequestToken(data?.data?.token);
+    //       configuration.setApiRequestToken(data?.data?.token);
 
-          config.headers = {
-            "Content-Type": "application/json",
-            Authorization: `${data?.data?.token?.access?.token}`,
-          };
-          config.baseURL = configuration.ApiUrl;
-          config.timeout = 30 * 1000;
+    //       config.headers = {
+    //         "Content-Type": "application/json",
+    //         Authorization: `${data?.data?.token?.access?.token}`,
+    //       };
+    //       config.baseURL = configuration.ApiUrl;
+    //       config.timeout = 30 * 1000;
 
-          return instance(config);
-        }
-      })();
-    }
-    else
-    {
-      // window.location = `http:/localhost:3000/${code}`
-    }
+    //       return instance(config);
+    //     }
+    //   })();
+    // }
+    // else
+    // {
+    //   // window.location = `http:/localhost:3000/${code}`
+    // }
 
     return error.response;
   }

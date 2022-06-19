@@ -1,27 +1,24 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Card,
-  Col,
-  Container, Dropdown, Nav,
-  Row
-} from "@themesberg/react-bootstrap";
-import { Divider, message, Upload } from "antd";
-import dogGif from 'app/assets/gif/dogLoading.gif';
+import { PlusOutlined } from "@ant-design/icons";
+import { Col, Container, Nav, Row } from "@themesberg/react-bootstrap";
+import { Divider, message, Upload, Avatar } from "antd";
+import dogGif from "app/assets/gif/dogLoading.gif";
 import Banner from "app/components/Banner/Banner";
 import { Routes } from "app/routes";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { NavLink, Route, Switch } from "react-router-dom";
+import PracticeResult from "./PracticeResult/PracticeResult";
+import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
+import StatementHistory from "./StatementHistory/StatementHistory";
+import MixingExamTest from "./MixingExamTest/MixingExamTest";
+import { generateAvatar } from 'app/utils/StringUtils'
 import "./Profile.css";
 import TestResult from "./TestResult/TestResult";
 
-
 const ProfilePage = ({ name }) => {
-  
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-
+  const user = useSelector((state) => state.persist.user?.user);
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -39,13 +36,12 @@ const ProfilePage = ({ name }) => {
 
   const uploadButton = (
     <div>
-      {loading ? <img src={dogGif} alt="avatar"/> : <PlusOutlined />}
+      {loading ? <img src={Profile3} alt="avatar" /> : <PlusOutlined />}
       <div
         style={{
           marginTop: 8,
         }}
-      >
-      </div>
+      ></div>
     </div>
   );
   return (
@@ -56,33 +52,23 @@ const ProfilePage = ({ name }) => {
           <Row>
             <Col lg={8} className="info-container d-flex">
               <div className="avatar-container">
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
+                <Avatar
+                className="avatar-private-profile"
+                size={300}
+                  style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                 >
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt="avatar"
-                      style={{
-                        width: "100%",
-                      }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
+                  {generateAvatar(user?.name)}
+                </Avatar>
+                {/* <img
+                  style={{ width: "300px", borderRadius: "50%" }}
+                  src={Profile3}
+                  alt="avatar"
+                /> */}
               </div>
               <div className="mx-4 short-user-info d-flex align-center align-items-center">
-                <h2>Dinh Tan Tu</h2>
+                <h2>{user?.name}</h2>
               </div>
             </Col>
-            <Col></Col>
           </Row>
           <Divider style={{ margin: "15px 0" }} />
           <div className="d-flex justify-content-between align-items-center">
@@ -96,21 +82,35 @@ const ProfilePage = ({ name }) => {
                 Overview
               </NavLink>
               <NavLink
-                to={"/user/profile/tests"}
+                to={"/user/profile/exam-tests-history"}
                 className="nav-link btn"
                 activeClassName="active"
               >
-                Tests
+                Exam Test History
               </NavLink>
               <NavLink
-                to={"/user/profile/contributed-contents"}
+                to={"/user/profile/practice-tests-history"}
                 className="nav-link btn"
                 activeClassName="active"
               >
-                Contributed Contents
+                Practice Tests History
+              </NavLink>
+              <NavLink
+                to={"/user/profile/mixing-exam-tests-history"}
+                className="nav-link btn"
+                activeClassName="active"
+              >
+                Mixing Exam Tests History
+              </NavLink>
+              <NavLink
+                to={"/user/profile/statement-history"}
+                className="nav-link btn"
+                activeClassName="active"
+              >
+                Statement History
               </NavLink>
             </Nav>
-            <Dropdown>
+            {/* <Dropdown>
               <Dropdown.Toggle
                 style={{
                   padding: "5px 10px",
@@ -126,30 +126,31 @@ const ProfilePage = ({ name }) => {
                 <Dropdown.Item href="#/action-1">Edit profile</Dropdown.Item>
                 <Dropdown.Item href="#/action-2">Report</Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </Container>
       </div>
       <div className="profile-content-container">
         <Container>
-          <Card
-            border="light"
-            className="table-wrapper table-responsive shadow-sm"
-          >
-            <Card.Body className="pt-0">
-              <Switch>
-                <Route
-                  path={"/user/profile/tests"}
-                  render={(props) => (  
-                    <TestResult
-                      {...props}
-                    />
-                  )}
-                />
-                <Route {...Routes.OverviewPage} />
-              </Switch>
-            </Card.Body>
-          </Card>
+          <Switch>
+            <Route
+              path={"/user/profile/exam-tests-history"}
+              render={(props) => <TestResult {...props} />}
+            />
+            <Route
+              path={"/user/profile/practice-tests-history"}
+              render={(props) => <PracticeResult {...props} />}
+            />
+            <Route
+              path={"/user/profile/statement-history"}
+              render={(props) => <StatementHistory {...props} />}
+            />
+            <Route
+              path={"/user/profile/mixing-exam-tests-history"}
+              render={(props) => <MixingExamTest {...props} />}
+            />
+            <Route {...Routes.OverviewPage} />
+          </Switch>
         </Container>
       </div>
     </>

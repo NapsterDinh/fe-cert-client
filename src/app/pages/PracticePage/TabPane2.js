@@ -1,22 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@themesberg/react-bootstrap";
-import moment from "moment";
-import {
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Tabs,
-  TimePicker,
-  Typography,
-} from "antd";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
+import { Divider, Form, Input, Modal, Select, Tabs, Typography } from "antd";
 import { createRandomTopicSession } from "app/core/apis/practice";
-import "./PracticePage.css";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import * as yup from "yup";
+import "./PracticePage.css";
 const { Text } = Typography;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -31,19 +22,20 @@ const schema = yup
     numberOfQuestions: yup
       .number()
       .typeError("Must be a number")
-      .min(0, "Duration > 0")
+      .min(20, "Number of question must be greate than 20")
       .required("Please Enter Number of questions!"),
     timeLimited: yup
       .number()
       .typeError("Must be a number")
-      .min(0, "Limited Time > 0")
+      .min(60, "Limited Time > 60")
       .required("Please Enter Limited Time"),
   })
   .required();
 
 const TabPane2 = ({ allTopic }) => {
-  const history = useHistory()
+  const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const user = useSelector((state) => state.persist.user?.user);
   const [form] = Form.useForm();
   const {
     control,
@@ -60,7 +52,7 @@ const TabPane2 = ({ allTopic }) => {
     defaultValues: {
       objectives: [],
       numberOfQuestions: 20,
-      timeLimited: 0,
+      timeLimited: 900,
     },
   });
 
@@ -87,29 +79,18 @@ const TabPane2 = ({ allTopic }) => {
     setIsModalVisible(false);
   };
 
-  const handleChange = (time) => {
-    if (time) {
-      clearErrors("timeLimited", "");
-      const timeLimited =
-        time._d.getSeconds() +
-        time._d.getMinutes() * 60 +
-        time._d.getHours() * 3600;
-      setValue("timeLimited", timeLimited);
-    } else {
-      setError("timeLimited", "Limited Time > 0");
-      setValue("timeLimited", 0);
-    }
-  };
-
   const handlePractice = async (values) => {
     try {
+      if (user === "") {
+        window.location = "/login";
+      }
       const response = await createRandomTopicSession({
         topics: values.objectives,
         numberOfQuestions: values.numberOfQuestions,
-        time: 1200,
+        time: values.timeLimited,
       });
       if (response?.data) {
-        history.push(`/practice/${response?.data?.exam?.exam}/attempt?type=topic_practice`);
+        history.push(`/exams/${response?.data?.exam?.exam}/attempt`);
       } else {
         alert(response.error);
       }
@@ -195,19 +176,20 @@ const TabPane2 = ({ allTopic }) => {
               />
             </Form.Item>
             <Form.Item label="*Time limited to do test:" className="form-timer">
-              <TimePicker
-                status={errors.timeLimited && "error"}
-                minuteStep={5}
-                secondStep={10}
-                format={format}
-                showNow={false}
-                onChange={handleChange}
+              <Controller
+                name="timeLimited"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <Input {...field} status={errors.timeLimited && "error"} />
+                    {errors.timeLimited && (
+                      <span className="error-message">
+                        {errors.timeLimited?.message}
+                      </span>
+                    )}
+                  </>
+                )}
               />
-              {errors.timeLimited && (
-                <span className="error-message">
-                  {errors.timeLimited?.message}
-                </span>
-              )}
             </Form.Item>
           </div>
 
@@ -258,10 +240,11 @@ const PracticeItem = ({ item, index, showModalPracticeOneTopic }) => {
       <h4>{item?.title}</h4>
       <div className="d-flex justify-content-between practice-item-top">
         <div className="practice-count-question">
-          Questions (En):{item?.totalQuestions}
+          Questions (En):
+           {item?.questions.filter((item) => !item.isDeleted)?.length} questions
         </div>
         <div className="practice-count-question">
-          Problems (En):{item?.totalProblems}
+          {/* Problems (En):{item?.totalProblems} */}
         </div>
         <Button
           variant="secondary"
@@ -272,17 +255,21 @@ const PracticeItem = ({ item, index, showModalPracticeOneTopic }) => {
         </Button>
       </div>
       <Divider />
-      {item?.section?.map((item2, index) => (
+      {item?.sections?.map((item2, index) => (
         <div key={item2?.id}>
           <h5>
             {index + 1}. {item2?.title}
           </h5>
           <div
             className="md-contents"
-            dangerouslySetInnerHTML={{ __html: item?.description }}
+            dangerouslySetInnerHTML={{
+              __html: decodeURIComponent(
+                escape(window.atob(item?.description))
+              ),
+            }}
           ></div>
           <ul>
-            {item2?.lectures?.map((item3) => (
+            {item2?.lessons?.map((item3) => (
               <li key={item3?.id}>{item3?.title}</li>
             ))}
           </ul>

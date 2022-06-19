@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 const { TabPane } = Tabs;
 
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ["Apple", "Pear", "Orange"];
 const optionalItems = [
   {
     value: "random-sort-choices",
@@ -26,20 +25,10 @@ const optionalItems = [
 const TabPane1 = ({ allExam }) => {
   const [checkedList, setCheckedList] = useState([]);
   const [optionalItemsChecked, setOptionalItemsChecked] = useState([]);
-  const [indeterminate, setIndeterminate] = useState(true);
-  const [checkAll, setCheckAll] = useState(false);
   const history = useHistory();
 
   const onChangeCheckbox = (list) => {
     setCheckedList(list);
-    setIndeterminate(!!list.length && list.length < allExam.length);
-    setCheckAll(list.length === allExam.length);
-  };
-
-  const onCheckAllChange = (e) => {
-    setCheckedList(e.target.checked ? allExam : []);
-    setIndeterminate(false);
-    setCheckAll(e.target.checked);
   };
 
   const startPraticing = async () => {
@@ -65,18 +54,8 @@ const TabPane1 = ({ allExam }) => {
         onChange={onChangeCheckbox}
         options={allExam}
       />
-      <div className="d-flex justify-content-end">
-        <Checkbox
-          indeterminate={indeterminate}
-          onChange={onCheckAllChange}
-          checked={checkAll}
-          className="my-4"
-        >
-          Check all
-        </Checkbox>
-      </div>
       <Divider />
-      <div
+      {/* <div
         data-show="true"
         className="ant-alert ant-alert-info ant-alert-with-description ant-alert-no-icon"
         role="alert"
@@ -92,7 +71,7 @@ const TabPane1 = ({ allExam }) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="text-center mb-4 my-4">
         <Button
           variant="primary"

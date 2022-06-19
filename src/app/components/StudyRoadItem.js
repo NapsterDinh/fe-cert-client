@@ -3,16 +3,25 @@ import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 
 const StudyRoadItem = ({ index, item }) => {
-    const history = useHistory()
-    return (
-        <div className="LearningPathGroup_wrapper__PqkfS">
-            <div className="d-flex justify-content-between title-container" onClick={() => history.push(`/topic${item.slug}`)}>
-                <h2 className="LearningPathGroup_title__9Sige">{`${index + 1}. ${item.title}`}</h2>
-                <FontAwesomeIcon icon={faCirclePlay} />
-            </div>
-
-            <p className="LearningPathGroup_desc__SnXOr">{item.description}</p>
-            {/* <div className="body">
+  const history = useHistory();
+  return (
+    <div className="LearningPathGroup_wrapper__PqkfS">
+      <div
+        className="d-flex justify-content-between title-container"
+        onClick={() => history.push(`/topics/${item._id}`)}
+      >
+        <h2 className="LearningPathGroup_title__9Sige">{`${index + 1}. ${
+          item.title
+        }`}</h2>
+        <FontAwesomeIcon icon={faCirclePlay} />
+      </div>
+      {item?.description !== undefined && (
+        <div
+          className="LearningPathGroup_desc__SnXOr"
+          dangerouslySetInnerHTML={{ __html: item?.description }}
+        ></div>
+      )}
+      {/* <div className="body">
                 <div className="CourseItem_wrapper__kyH00">
                     <div className="CourseItem_inner__YxSfd">
                         <div className="CourseItem_thumb__7g8hs"><a href="/courses/lessons-for-newbie"><img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" alt="Kiến Thức Nhập Môn IT"></a></div>
@@ -22,8 +31,8 @@ const StudyRoadItem = ({ index, item }) => {
                     </div>
                 </div>
             </div> */}
-        </div>
-    );
-}
+    </div>
+  );
+};
 
 export default StudyRoadItem;

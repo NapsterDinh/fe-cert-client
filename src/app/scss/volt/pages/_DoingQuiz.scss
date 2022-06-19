@@ -84,13 +84,14 @@
                 }
                 .question-container
                 {
-                    justify-content: space-between;
                     flex-wrap: wrap;
                     max-height: 600px;
                     min-height: 350px;
                     overflow-y: scroll;
                     padding: 20px;
                     padding-left: 10px;
+                    padding-right: 0px;
+                    gap: 20px;
                     /* width */
                     &::-webkit-scrollbar {
                         width: 10px;

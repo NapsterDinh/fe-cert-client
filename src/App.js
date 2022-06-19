@@ -98,12 +98,12 @@ function App() {
             name={Routes.DoingQuizPage.name}
           />
 
-          <RouteWithSidebarNeedLogin
+          {/* <RouteWithSidebarNeedLogin
             exact={Routes.DoingPracticePage.exact}
             path={Routes.DoingPracticePage.path}
             component={Routes.DoingPracticePage.element}
             name={Routes.DoingPracticePage.name}
-          />
+          /> */}
 
           <RouteWithSidebarNeedLogin
             exact={Routes.AnswerQuizPage.exact}
@@ -112,12 +112,12 @@ function App() {
             name={Routes.AnswerQuizPage.name}
           />
 
-          <RouteWithSidebarNeedLogin
+          {/* <RouteWithSidebarNeedLogin
             exact={Routes.AnswerPracticePage.exact}
             path={Routes.AnswerPracticePage.path}
             component={Routes.AnswerPracticePage.element}
             name={Routes.AnswerPracticePage.name}
-          />
+          /> */}
 
           <RouteWithSidebar
             exact={Routes.HomePage.exact}

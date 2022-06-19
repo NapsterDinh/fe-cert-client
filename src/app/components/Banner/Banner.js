@@ -5,7 +5,6 @@ import {
   faVuejs,
 } from "@fortawesome/free-brands-svg-icons";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Card,
@@ -14,17 +13,19 @@ import {
   ProgressBar,
   Row,
 } from "@themesberg/react-bootstrap";
-import { Tooltip, Alert } from "antd";
+import { Tooltip } from "antd";
 import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
-import InnerHTML from "dangerously-set-html-content";
 import React from "react";
 import { useSelector } from "react-redux";
+import useBreadcrumb from "app/utils/useBreadCrumb";
+import { PageHeader, Breadcrumb } from "antd";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import "./Banner.css";
 
 const Banner = ({ name }) => {
   const isHome =
     name === "Home Page" ? "pageBanner_def home" : "pageBanner_def";
-
+  const breadcrumbItems = useBreadcrumb();
   return (
     <div className={isHome} style={{ backgroundImage: `url(${bannerBg})` }}>
       <div className="container_common">
@@ -36,23 +37,19 @@ const Banner = ({ name }) => {
                 <h3 className="learntocodeh3">
                   With the world's largest web developer site.
                 </h3>
-                <br></br>
-                <div className="container-form">
-                  <input
-                    type="text"
-                    placeholder="Search our tutorials"
-                    id="search2"
-                  ></input>
-                  <button type="button" id="learntocode_searchbtn">
-                    <FontAwesomeIcon icon={faSearch} />
-                  </button>
-                </div>
-                <h4>
-                  <a href="/studyRoad">Not Sure Where To Begin?</a>
-                </h4>
               </div>
             ) : (
-              <div className="name">{name}</div>
+              <>
+                <Col span={18}>
+                  <PageHeader
+                    className="site-page-header"
+                    title={name}
+                    breadcrumbRender={() => (
+                      <Breadcrumb>{breadcrumbItems}</Breadcrumb>
+                    )}
+                  />
+                </Col>
+              </>
             )}
           </div>
         </div>
@@ -62,7 +59,9 @@ const Banner = ({ name }) => {
 };
 
 export const BannerAnswerQuiz = () => {
+  const location = useLocation();
   const exam = useSelector((state) => state.exam.exam);
+
   const totalCorrectAnswer = () => {
     let total = 0;
     if (exam !== "") {
@@ -84,10 +83,53 @@ export const BannerAnswerQuiz = () => {
         <div className="container_common">
           <div className="content_common">
             <div className="ifm">
+              <Container
+                className="banner-answer-container"
+                style={{ paddingBottom: "10px" }}
+              >
+                <Breadcrumb style={{ paddingTop: "50px" }}>
+                  <Breadcrumb.Item>Home</Breadcrumb.Item>
+                  <Breadcrumb.Item>
+                    {exam?.type === "normal_practice" && (
+                      <a href="/user/profile/mixing-exam-tests-history">
+                        Mixing Exam Tests
+                        {location.pathname.includes("result") ? " Result" : ""}
+                      </a>
+                    )}
+                    {exam?.type === "exam" && (
+                      <a href="/user/profile/exam-tests-history">
+                        Exam Tests
+                        {location.pathname.includes("result") ? " Result" : ""}
+                      </a>
+                    )}
+                    {exam?.type === "topic_practice" && (
+                      <a href="/user/profile/practice-tests-history">
+                        Practice Tests
+                        {location.pathname.includes("result") ? " Result" : ""}
+                      </a>
+                    )}
+                  </Breadcrumb.Item>
+                  {exam?.type === "topic_practice" && (
+                    <Breadcrumb.Item>Practice by Topic</Breadcrumb.Item>
+                  )}
+                  {exam?.type === "exam" && (
+                    <Breadcrumb.Item>{exam.title}</Breadcrumb.Item>
+                  )}
+                  {exam?.type === "normal_practice" && (
+                    <Breadcrumb.Item>Mixing Exam Tests</Breadcrumb.Item>
+                  )}
+                </Breadcrumb>
+              </Container>
               <Container className="d-flex banner-answer-container">
                 <Col lg={9}>
-                  <h2>{exam?.title}</h2>
-                  <p className="description">{exam?.description}</p>
+                  {exam?.type === "topic_practice" && (
+                    <h2>Practice by topic</h2>
+                  )}
+                  {exam?.type === "normal_practice" && (
+                    <h2>Mixing Exam Test</h2>
+                  )}
+                  {exam?.type === "exam" && <h2>{exam?.title}</h2>}
+
                   {exam?.content !== undefined && (
                     <div
                       style={{
@@ -95,12 +137,14 @@ export const BannerAnswerQuiz = () => {
                         color: "white",
                       }}
                       dangerouslySetInnerHTML={{
-                        __html:decodeURIComponent(escape(window.atob(exam?.content))),
+                        __html: decodeURIComponent(
+                          escape(window.atob(exam?.content))
+                        ),
                       }}
                     ></div>
                   )}
-                  <p className="requirement">{`Requirement: ${Math.round(
-                    exam?.questions?.length / 2
+                  <p className="requirement">{`Requirement: ${Math.ceil(
+                    exam?.questions?.length * 0.6
                   )}/${exam?.questions?.length}`}</p>
                 </Col>
                 <Col lg={3} className="col-right-answer-exam">

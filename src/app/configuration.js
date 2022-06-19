@@ -11,6 +11,6 @@ const configuration = {
   }
 };
 
-export const serverURL = 'http://localhost:300'
+export const serverURL = 'http://localhost:3000'
 
 export default configuration;

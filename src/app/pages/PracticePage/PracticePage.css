@@ -1,6 +1,6 @@
 .ant-tabs-nav-list {
   width: 100%;
-  justify-content: space-between;
+  justify-content: center;
 }
 .ant-alert-message {
   font-size: 24px !important;
@@ -24,6 +24,7 @@
 }
 .practice-with-each-section .practice-count-question {
   font-weight: 700;
+  font-size: 18px;
   line-height: 46px;
 }
 .practice-with-each-section li {

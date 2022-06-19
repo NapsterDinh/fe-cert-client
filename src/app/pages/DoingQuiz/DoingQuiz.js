@@ -1,11 +1,10 @@
 import { Col, Container } from "@themesberg/react-bootstrap";
 import { getCurrentExam, updateAnswer } from "app/core/apis/exam";
 import { getCurrentRandomSession } from "app/core/apis/practice";
-import React, { useLayoutEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import DetailQuestion from "../DoingPractice/DetailQuestions";
-import QuestionList from "./QuestionList";
+import DetailQuestion from "./DetailQuestionsQuiz";
+import QuestionList from "./QuestionListQuiz";
 
 const DoingQuiz = () => {
   const [data, setData] = useState("");
@@ -43,7 +42,7 @@ const DoingQuiz = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     (async () => {
       try {
         let response = "";
@@ -52,14 +51,23 @@ const DoingQuiz = () => {
         } else {
           response = await getCurrentRandomSession();
         }
-        setData(response?.data?.exam.exam);
+        setData({
+          ...response?.data?.exam.exam,
+          questions: response?.data?.exam.exam?.questions.map((item) => ({
+            ...item,
+            question: decodeURIComponent(escape(window.atob(item?.question))),
+            explanation: decodeURIComponent(
+              escape(window.atob(item?.explanation))
+            ),
+          })),
+        });
         setSubmissionArray(response?.data?.exam.submissions);
         setStartTime(response?.data?.exam?.createdAt);
       } catch (error) {}
     })();
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (data !== "") {
       if (currentOrder === null) {
         //get index = 0 or question 1

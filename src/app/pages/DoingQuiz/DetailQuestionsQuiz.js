@@ -12,7 +12,7 @@ const DetailQuestion = ({
   submissionArray,
   setSubmissionArray,
   selected,
-  setSelected
+  setSelected,
 }) => {
   const history = useHistory();
   const [modalShow, setModalShow] = useState(false);
@@ -77,7 +77,9 @@ const DetailQuestion = ({
         <h1>Question {item.index}</h1>
         <div
           className="question-content"
-          dangerouslySetInnerHTML={{ __html: item?.question }}
+          dangerouslySetInnerHTML={{
+            __html: item?.question,
+          }}
         ></div>
         <hr></hr>
         <span>Choose the correct answer</span>

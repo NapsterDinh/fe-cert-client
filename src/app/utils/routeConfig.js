@@ -26,7 +26,8 @@ export const RouteWithSidebar = ({ component: Component, ...rest }) => {
             <div className="main-app gray">
               {rest?.name === "Pricing Page" ? (
                 <BannerPricing />
-              ) : (
+              ) : rest?.name === "Topic Page" ? null : rest?.name ===
+                "Document Page" ? null : (
                 <Banner {...props} {...rest} />
               )}
               <Component {...props} {...rest} />
@@ -70,7 +71,7 @@ export const RouteWithSidebarNeedLogin = ({
                 <Header />
                 <div className="main-app gray">
                   {rest?.name === "Answer Page" && <BannerAnswerQuiz />}
-                  
+
                   <Component {...props} {...rest} />
                 </div>
                 <Footer />
