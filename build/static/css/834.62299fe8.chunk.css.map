@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/834.62299fe8.chunk.css","mappings":"AAAA,8BAEI,QACJ,CACA,aAEI,UACJ","sources":["app/pages/AnswerPractice/AnswerPractice.css"],"sourcesContent":[".layout-container-body.answer\n{\n    flex: 1 0;\n}\n.tabs-answer\n{\n    width: 100%;\n}"],"names":[],"sourceRoot":""}
