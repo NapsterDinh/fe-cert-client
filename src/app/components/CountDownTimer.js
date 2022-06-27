@@ -1,4 +1,5 @@
-import useCountDown from 'app/hooks/useCountDown';
+import useCountDown from "app/hooks/useCountDown";
+import { useEffect } from "react";
 
 const ExpiredNotice = () => {
   return (
@@ -12,19 +13,22 @@ const ExpiredNotice = () => {
 const ShowCounter = ({ days, hours, minutes, seconds }) => {
   return (
     <div className="show-counter d-flex">
-       {/* <DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
+      {/* <DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
         <p>:</p> */}
-        <DateTimeDisplay value={hours} type={"h"} isDanger={false} />
-        <DateTimeDisplay value={minutes} type={"m"} isDanger={false} />
-        <DateTimeDisplay value={seconds} type={"s"} isDanger={false} />
+      <DateTimeDisplay value={hours} type={"h"} isDanger={false} />
+      <DateTimeDisplay value={minutes} type={"m"} isDanger={false} />
+      <DateTimeDisplay value={seconds} type={"s"} isDanger={false} />
     </div>
   );
 };
 
-const CountDownTimer = ({ targetDate }) => {
+const CountDownTimer = ({ targetDate, onSubmitExam }) => {
   const [days, hours, minutes, seconds] = useCountDown(targetDate);
 
-  if (days + hours + minutes + seconds <= 0) {
+  if (days + hours + minutes + seconds < 0) {
+    (async () => {
+      await onSubmitExam();
+    })();
     return <ExpiredNotice />;
   } else {
     return (
@@ -38,12 +42,12 @@ const CountDownTimer = ({ targetDate }) => {
   }
 };
 
-const DateTimeDisplay = ({value, type, isDanger}) => {
-    return (
-      <div className={isDanger ? 'countdown danger mx-1' : 'countdown mx-1'}>
-        <h2>{`${value}${type}`}</h2>
-      </div>
-    );
-  };
+const DateTimeDisplay = ({ value, type, isDanger }) => {
+  return (
+    <div className={isDanger ? "countdown danger mx-1" : "countdown mx-1"}>
+      <h2>{`${value}${type}`}</h2>
+    </div>
+  );
+};
 
 export default CountDownTimer;

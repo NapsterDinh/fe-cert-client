@@ -49,6 +49,10 @@ const PricingPage = React.lazy(() =>
 
 const CheckoutPage = React.lazy(() => import("app/pages/Checkout/Checkout"));
 
+const ResultCheckoutPage = React.lazy(() =>
+  import("app/pages/ResultCheckout/ResultCheckout")
+);
+
 export const Routes = {
   // pages
   LockPage: {
@@ -191,10 +195,16 @@ export const Routes = {
     element: PricingPage,
   },
   CheckoutPage: {
-    path: ["/checkout/:idServicePack"],
+    path: ["/checkout/:idServicePack", "/checkout/:idServicePack/pending"],
     exact: true,
     name: "Checkout Page",
     element: CheckoutPage,
+  },
+  ResultCheckoutPage: {
+    path: ["/result-checkout/:status"],
+    exact: true,
+    name: "Result Checkout Page",
+    element: ResultCheckoutPage,
   },
 
   HomePage: {

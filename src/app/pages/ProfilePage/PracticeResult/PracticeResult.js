@@ -12,13 +12,15 @@ export const PracticeResult = () => {
         if (response.status === 200) {
           setData(
             response.data.exam
-              .filter((item) => item.exam.type !== "exam")
+              .filter((item) => item.exam.type === "topic_practice")
               .map((item) => ({
                 id: item._id,
                 title: item.exam.title,
                 type: item.exam.type,
                 result: item.isPassed,
                 createdAt: item.createdAt,
+                totalCorrect: item.totalCorrect,
+                totalQuestions: item.totalQuestions,
                 idExam: item.exam._id,
                 isPassed: item.isPassed ? "Pass" : "Failed",
                 status: item.status,
@@ -31,10 +33,11 @@ export const PracticeResult = () => {
   }, []);
 
   return (
-    <div style={{ width: "100%" }}>
-      <h3 className="my-4">Practice Test History</h3>
-      {data !== "" && <TablePracticeResult data={data} />}
-    </div>
+    // <div style={{ width: "100%" }}>
+    //   <h3 className="my-4">Practice Test History</h3>
+    //   {data !== "" && <TablePracticeResult data={data} />}
+    // </div>
+    <>{data !== "" && <TablePracticeResult data={data} />}</>
   );
 };
 

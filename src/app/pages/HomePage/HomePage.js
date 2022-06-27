@@ -1,6 +1,4 @@
-import WhatsNewPage from "./WhatsNewPage";
-import ExamSchedule from "./ExamSchedule";
-import { Button, Row } from "@themesberg/react-bootstrap";
+import { Button } from "@themesberg/react-bootstrap";
 import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
 import "./HomePage.css";
 const HomePage = () => {
@@ -14,7 +12,12 @@ const HomePage = () => {
         <div className="d-flex justify-content-center">
           <p
             className="text-center"
-            style={{ width: "70%", fontSize: "26px", whiteSpace: "pre-wrap" }}
+            style={{
+              width: "70%",
+              fontSize: "26px",
+              whiteSpace: "pre-wrap",
+              marginBottom: "60px",
+            }}
           >
             FE VietNam is an adaptive digital solution for preparation of FE
             exams. {`\n`}Our digital platform is designed to help developer can

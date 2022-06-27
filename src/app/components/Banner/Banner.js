@@ -91,19 +91,19 @@ export const BannerAnswerQuiz = () => {
                   <Breadcrumb.Item>Home</Breadcrumb.Item>
                   <Breadcrumb.Item>
                     {exam?.type === "normal_practice" && (
-                      <a href="/user/profile/mixing-exam-tests-history">
+                      <a href="/user/profile/tests-history">
                         Mixing Exam Tests
                         {location.pathname.includes("result") ? " Result" : ""}
                       </a>
                     )}
                     {exam?.type === "exam" && (
-                      <a href="/user/profile/exam-tests-history">
+                      <a href="/user/profile/tests-history">
                         Exam Tests
                         {location.pathname.includes("result") ? " Result" : ""}
                       </a>
                     )}
                     {exam?.type === "topic_practice" && (
-                      <a href="/user/profile/practice-tests-history">
+                      <a href="/user/profile/tests-history">
                         Practice Tests
                         {location.pathname.includes("result") ? " Result" : ""}
                       </a>

@@ -1,23 +1,24 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-
+import PopUpCurrentExam from "app/components/PopUpCurrentExam/PopUpCurrentExam";
+import PreloaderNoProps from "app/components/PreloaderNoProps";
+import ScrollTop from "app/components/ScrollTop";
+import { Routes } from "app/routes";
 import "app/scss/_App.scss";
-
 //components
-import RouteWithLoader, {
-  RouteWithSidebar,
+import {
   RouteBasicPage,
+  RouteWithSidebar,
   RouteWithSidebarNeedLogin,
 } from "app/utils/routeConfig";
-import PreloaderNoProps from "app/components/PreloaderNoProps";
-import { Routes } from "app/routes";
-import ScrollTop from "app/components/ScrollTop";
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={PreloaderNoProps}>
         <ScrollTop />
+        <PopUpCurrentExam />
+
         <Switch>
           {/* RouteWithLoader */}
           <RouteBasicPage
@@ -138,6 +139,13 @@ function App() {
             path={Routes.CheckoutPage.path}
             component={Routes.CheckoutPage.element}
             name={Routes.CheckoutPage.name}
+          />
+
+          <RouteWithSidebarNeedLogin
+            exact={Routes.ResultCheckoutPage.exact}
+            path={Routes.ResultCheckoutPage.path}
+            component={Routes.ResultCheckoutPage.element}
+            name={Routes.ResultCheckoutPage.name}
           />
 
           <RouteWithSidebar

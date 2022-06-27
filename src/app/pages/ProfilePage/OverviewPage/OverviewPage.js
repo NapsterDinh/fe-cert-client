@@ -5,7 +5,8 @@ import { CounterWidget, ProgressTrackWidget } from "app/components/Widgets";
 import { getTopicStatistic } from "app/core/apis/user";
 import { getTimeAndPercentCorrectByID } from "app/utils/ArrayUtils";
 import React, { useEffect, useState } from "react";
-import { Tabs } from "antd";
+import { Tabs, Spin } from "antd";
+import FakeChart from "app/assets/fake/chartFakeProfile.PNG";
 import "./OverviewPage.css";
 
 const { TabPane } = Tabs;
@@ -25,8 +26,9 @@ const OverviewPage = () => {
         if (response2.status === 200 && response1.status === 200) {
           setExamOverview(response2?.data?.exam);
 
-          setPercentExam(
-            response2?.data?.exam?.topicsList.map((item, index) => {
+          setPercentExam({
+            ...response2?.data?.exam,
+            topicsList: response2?.data?.exam?.topicsList.map((item, index) => {
               return {
                 title: item.title,
                 countCorrect: item.totalCorrect,
@@ -46,32 +48,37 @@ const OverviewPage = () => {
                     ? true
                     : false,
               };
-            })
-          );
+            }),
+          });
 
-          setPercentPractice(
-            response1?.data?.exam?.topicsList.map((item, index) => ({
-              title: item.title,
-              countCorrect: item.totalCorrect,
-              percentage:
-                item.totalQuestion !== 0
-                  ? parseInt(
-                      ((item.totalCorrect / item.totalQuestion) * 100).toFixed(
-                        0
+          setPercentPractice({
+            ...response1?.data?.exam,
+            topicsList: response1?.data?.exam?.topicsList.map(
+              (item, index) => ({
+                title: item.title,
+                countCorrect: item.totalCorrect,
+                percentage:
+                  item.totalQuestion !== 0
+                    ? parseInt(
+                        (
+                          (item.totalCorrect / item.totalQuestion) *
+                          100
+                        ).toFixed(0)
                       )
-                    )
-                  : 0,
-              color: "#" + Math.floor(Math.random() * 16777215).toString(16),
-              total: item.totalQuestion,
-              last:
-                index === response1?.data?.exam?.topicsList?.length - 1
-                  ? true
-                  : false,
-            }))
-          );
+                    : 0,
+                color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+                total: item.totalQuestion,
+                last:
+                  index === response1?.data?.exam?.topicsList?.length - 1
+                    ? true
+                    : false,
+              })
+            ),
+          });
 
-          setPercentMixingExamTest(
-            response?.data?.exam?.topicsList.map((item, index) => ({
+          setPercentMixingExamTest({
+            ...response?.data?.exam,
+            topicsList: response?.data?.exam?.topicsList.map((item, index) => ({
               title: item.title,
               countCorrect: item.totalCorrect,
               percentage:
@@ -88,8 +95,8 @@ const OverviewPage = () => {
                 index === response?.data?.exam?.topicsList?.length - 1
                   ? true
                   : false,
-            }))
-          );
+            })),
+          });
         }
       } catch (error) {
         console.log(error);
@@ -99,86 +106,222 @@ const OverviewPage = () => {
   return (
     <>
       <Row className="justify-content-md-center mt-4 overview-container-page">
-        {historyExam !== "" &&
-          historyExam !== [] &&
-          predictNextResult !== "" && (
-            <LineChart
-              {...getTimeAndPercentCorrectByID(historyExam, predictNextResult)}
-              title="Result and Prediction"
-            />
-          )}
-        <Tabs defaultActiveKey="1">
-          <TabPane tab="Exam statistic" key="1">
-            <div className="statistic-component">
-              <h2>Exam statistic</h2>
-              <div>
-                <Col xs={12} sm={6} xl={4} className="mb-4">
-                  <CounterWidget
-                    category="Number of times to make exam tests"
-                    title={examOverview.totalExams}
-                    period="Feb 1 - Apr 1"
-                    percentage={18.2}
-                    icon={faChartLine}
-                    iconColor="shape-secondary"
+        <h3 className="my-4">Overview</h3>
+        <Spin
+          spinning={percentMixingExamTest === ""}
+          className="spin-doing-quiz"
+          tip="Loading..."
+        >
+          {percentMixingExamTest !== "" && (
+            <>
+              {historyExam !== "" &&
+                historyExam !== [] &&
+                predictNextResult !== "" && (
+                  <LineChart
+                    {...getTimeAndPercentCorrectByID(
+                      historyExam,
+                      predictNextResult
+                    )}
+                    title="Result and Prediction"
                   />
-                </Col>
-              </div>
+                )}
+              {/* <div className="d-flex justify-content-center my-4">
+                <img src={FakeChart}></img>
+              </div> */}
 
-              <div>
-                <ProgressTrackWidget
-                  titleProgress={"Exam progess track"}
-                  data={percentExam !== "" ? percentExam : []}
-                />
-              </div>
-            </div>
-          </TabPane>
-          <TabPane tab="Practice statistic" key="2">
-            <div className="statistic-component">
-              <h2>Practice statistic</h2>
-              <div>
-                <Col xs={12} sm={6} xl={4} className="mb-4">
-                  <CounterWidget
-                    category="Number of times to make practice tests"
-                    title={examOverview.totalPractices}
-                    period="Feb 1 - Apr 1"
-                    percentage={28.4}
-                    icon={faCashRegister}
-                    iconColor="shape-tertiary"
-                  />
-                </Col>
-              </div>
-              <ProgressTrackWidget
-                titleProgress={"Practice progess track"}
-                data={percentPractice !== "" ? percentPractice : []}
-              />
-            </div>
-          </TabPane>
-          <TabPane tab="Mixing Exam Test statistic" key="3">
-            <div className="statistic-component">
-              <h2>Mixing Exam Test statistic</h2>
-              <div>
-                <Col xs={12} sm={6} xl={4} className="mb-4">
-                  <CounterWidget
-                    category="Number of times to make practice tests"
-                    title={examOverview.totalPractices}
-                    period="Feb 1 - Apr 1"
-                    percentage={28.4}
-                    icon={faCashRegister}
-                    iconColor="shape-tertiary"
-                  />
-                </Col>
-              </div>
-              <ProgressTrackWidget
-                titleProgress={"Mixing exam test progess track"}
-                data={percentMixingExamTest !== "" ? percentMixingExamTest : []}
-              />
-            </div>
-          </TabPane>
-        </Tabs>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Exam statistic" key="1">
+                  <div className="statistic-component">
+                    <h2>Exam statistic</h2>
+                    <div className="d-flex justify-content-between">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Number of test"
+                          title={percentExam?.totalExams}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Highest score"
+                          title={(percentExam?.maxMark?.maxMark * 100).toFixed(
+                            2
+                          )}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Lowest score"
+                          title={(percentExam?.minMark?.minMark * 100).toFixed(
+                            2
+                          )}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Average of score"
+                          title={(percentExam?.avgMark * 100).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
 
-        {/* <Col xs={12} sm={6} xl={4} className="mb-4">
+                    <div>
+                      <ProgressTrackWidget
+                        titleProgress={"Exam progess track"}
+                        data={percentExam !== "" ? percentExam?.topicsList : []}
+                      />
+                    </div>
+                  </div>
+                </TabPane>
+                <TabPane tab="Practice statistic" key="2">
+                  <div className="statistic-component">
+                    <h2>Practice statistic</h2>
+                    <div className="d-flex justify-content-between">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Number of test"
+                          title={percentPractice?.totalPractices}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Highest score"
+                          title={(
+                            percentPractice?.maxMark?.maxMark * 100
+                          ).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Lowest score"
+                          title={(
+                            percentPractice?.minMark?.minMark * 100
+                          ).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Average of score"
+                          title={(percentPractice?.avgMark * 100).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
+                    <ProgressTrackWidget
+                      titleProgress={"Practice progess track"}
+                      data={
+                        percentPractice !== ""
+                          ? percentPractice?.topicsList
+                          : []
+                      }
+                    />
+                  </div>
+                </TabPane>
+                <TabPane tab="Mixing Exam Test statistic" key="3">
+                  <div className="statistic-component">
+                    <h2>Mixing Exam Test statistic</h2>
+                    <div className="d-flex justify-content-between">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Number of test"
+                          title={percentMixingExamTest?.totalExams}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Highest score"
+                          title={(
+                            percentMixingExamTest?.maxMark?.maxMark * 100
+                          ).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Lowest score"
+                          title={(
+                            percentMixingExamTest?.minMark?.minMark * 100
+                          ).toFixed(2)}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <Col xs={12} sm={6} xl={3} className="mb-4">
+                        <CounterWidget
+                          category="Average of score"
+                          title={(percentMixingExamTest?.avgMark * 100).toFixed(
+                            2
+                          )}
+                          period="Feb 1 - Apr 1"
+                          percentage={18.2}
+                          icon={faChartLine}
+                          iconColor="shape-secondary"
+                        />
+                      </Col>
+                    </div>
+                    <ProgressTrackWidget
+                      titleProgress={"Mixing exam test progess track"}
+                      data={
+                        percentMixingExamTest !== ""
+                          ? percentMixingExamTest?.topicsList
+                          : []
+                      }
+                    />
+                  </div>
+                </TabPane>
+              </Tabs>
+
+              {/* <Col xs={12} sm={6} xl={4} className="mb-4">
           <CircleChartWidget title="Traffic Share" data={trafficShares} />
         </Col> */}
+            </>
+          )}
+        </Spin>
       </Row>
     </>
   );

@@ -1,6 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@themesberg/react-bootstrap";
-import { Divider, Form, Input, Modal, Select, Tabs, Typography } from "antd";
+import {
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Tabs,
+  Typography,
+  Spin,
+} from "antd";
 import { createRandomTopicSession } from "app/core/apis/practice";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -27,7 +36,7 @@ const schema = yup
     timeLimited: yup
       .number()
       .typeError("Must be a number")
-      .min(60, "Limited Time > 60")
+      .min(10, "Limited Time > 60")
       .required("Please Enter Limited Time"),
   })
   .required();
@@ -35,7 +44,10 @@ const schema = yup
 const TabPane2 = ({ allTopic }) => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const user = useSelector((state) => state.persist.user?.user);
+  const user = useSelector((state) => state.persist.user?.user?.user);
+  const currentDoingExam = useSelector(
+    (state) => state?.exam?.currentDoingExam
+  );
   const [form] = Form.useForm();
   const {
     control,
@@ -202,34 +214,49 @@ const TabPane2 = ({ allTopic }) => {
             >
               Cancel
             </Button>
-            <Button disabled={isSubmitting} type="submit" variant="primary">
+            <Button
+              disabled={isSubmitting || currentDoingExam?.exam !== undefined}
+              type="submit"
+              variant="primary"
+            >
               Submit
             </Button>
           </div>
         </Form>
       </Modal>
-      <div className="practice-with-each-section">
-        {allTopic?.map((item, index) => (
-          <>
-            <PracticeItem
-              key={`PracticeItem${item._id}`}
-              item={item}
-              index={index}
-              showModalPracticeOneTopic={showModalPracticeOneTopic}
-            />
-            <Divider />
-          </>
-        ))}
-      </div>
-      <div className="text-center mb-4 my-4">
-        <Button
-          variant="primary"
-          className="make-full"
-          onClick={showModalAllTopic}
-        >
-          Make full practice
-        </Button>
-      </div>
+      <Spin
+        className="sping-practice"
+        spinning={allTopic.length === 0}
+        tip="Loading..."
+        style={{ minHeight: "400px" }}
+      >
+        <div className="practice-with-each-section">
+          {allTopic
+            ?.filter((t) => t?.status === "public")
+            ?.map((item, index) => (
+              <>
+                <PracticeItem
+                  key={`PracticeItem${item._id}`}
+                  item={item}
+                  index={index}
+                  showModalPracticeOneTopic={showModalPracticeOneTopic}
+                />
+                <Divider />
+              </>
+            ))}
+        </div>
+        {allTopic.length !== 0 && (
+          <div className="text-center mb-4 my-4">
+            <Button
+              variant="primary"
+              className="make-full"
+              onClick={showModalAllTopic}
+            >
+              Make full practice
+            </Button>
+          </div>
+        )}
+      </Spin>
     </>
   );
 };
@@ -241,7 +268,7 @@ const PracticeItem = ({ item, index, showModalPracticeOneTopic }) => {
       <div className="d-flex justify-content-between practice-item-top">
         <div className="practice-count-question">
           Questions (En):
-           {item?.questions.filter((item) => !item.isDeleted)?.length} questions
+          {item?.questions.filter((item) => !item.isDeleted)?.length} questions
         </div>
         <div className="practice-count-question">
           {/* Problems (En):{item?.totalProblems} */}
@@ -260,14 +287,14 @@ const PracticeItem = ({ item, index, showModalPracticeOneTopic }) => {
           <h5>
             {index + 1}. {item2?.title}
           </h5>
-          <div
+          {/* <div
             className="md-contents"
             dangerouslySetInnerHTML={{
               __html: decodeURIComponent(
                 escape(window.atob(item?.description))
               ),
             }}
-          ></div>
+          ></div> */}
           <ul>
             {item2?.lessons?.map((item3) => (
               <li key={item3?.id}>{item3?.title}</li>

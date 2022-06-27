@@ -12,6 +12,9 @@ export const getExamById = (id) => {
 };
 
 export const checkExamByIdAndUser = (id, user) => {
+  if (id === undefined) {
+    return _get(`/api/v1/exam/session`);
+  }
   return _get(`/api/v1/exam/session?exam=${id}&user=${user}`);
 };
 
@@ -44,7 +47,7 @@ export const getHistoryExam = () => {
 };
 
 export const getHistoryByIdExam = (idExam) => {
-  return _get(`/api/v1/exam//history-by-id?exam=${idExam}`);
+  return _get(`/api/v1/exam/history-by-id?exam=${idExam}`);
 };
 
 export const predictNextResultExam = (idExam) => {

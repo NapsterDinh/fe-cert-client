@@ -61,6 +61,36 @@
   right: 29px;
   color: #1890ff;
 }
+.scroll-top.current-exam {
+  bottom: 50%;
+}
+.scroll-top.current-exam svg {
+  background-color: #1890ff;
+  border-radius: 50%;
+  color: white;
+  animation: at-ripple 0.6s linear infinite;
+}
+
+@-webkit-keyframes at-ripple {
+  0% {
+    box-shadow: 0 4px 10px #41a5f9, 0 0 0 0 #41a5f9, 0 0 0 5px #41a5f9,
+      0 0 0 10px #41a5f9;
+  }
+  100% {
+    box-shadow: 0 4px 10px #41a5f9, 0 0 0 5px #41a5f9, 0 0 0 10px #41a5f9,
+      0 0 0 20px rgba(102, 102, 102, 0);
+  }
+}
+@keyframes at-ripple {
+  0% {
+    box-shadow: 0 4px 10px #41a5f9, 0 0 0 0 #41a5f9, 0 0 0 5px #41a5f9,
+      0 0 0 10px #41a5f9;
+  }
+  100% {
+    box-shadow: 0 4px 10px #41a5f9, 0 0 0 5px #41a5f9, 0 0 0 10px #41a5f9,
+      0 0 0 20px rgba(102, 102, 102, 0);
+  }
+}
 a {
   &:hover {
     color: #5caaf3;
@@ -118,4 +148,7 @@ a {
   font-weight: 700;
   color: #fff;
   text-shadow: 0 5px 20px rgb(0 0 0 / 50%);
+}
+.tab-practice .ant-tabs-content-holder {
+  min-height: 400px;
 }

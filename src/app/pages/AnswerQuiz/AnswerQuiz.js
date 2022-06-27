@@ -24,6 +24,7 @@ import "./AnswerQuiz.css";
 const { TabPane } = Tabs;
 
 const AnswerQuiz = () => {
+  const user = useSelector((state) => state.persist.user?.user);
   const [questionShow, setQuestionShow] = useState("");
   const location = useLocation();
   const [topic, setTopic] = useState([]);
@@ -214,8 +215,14 @@ const AnswerQuiz = () => {
                           )}
                         </td>
                         <td className="td-question">
-                          <Tooltip title={temp.question.replaceAll(/<\/?[^>]+(>|$)/g, "").replaceAll(`&nbsp;`, " ")}>
-                            {temp.question.replaceAll(/<\/?[^>]+(>|$)/g, "").replaceAll(`&nbsp;`, " ")}
+                          <Tooltip
+                            title={temp.question
+                              .replaceAll(/<\/?[^>]+(>|$)/g, "")
+                              .replaceAll(`&nbsp;`, " ")}
+                          >
+                            {temp.question
+                              .replaceAll(/<\/?[^>]+(>|$)/g, "")
+                              .replaceAll(`&nbsp;`, " ")}
                           </Tooltip>
                         </td>
                         <td>
@@ -327,6 +334,7 @@ const DetailQuestion = ({
 }) => {
   const history = useHistory();
   const location = useLocation();
+  const user = useSelector((state) => state.persist.user?.user);
   return (
     <>
       <div className="count-question">
@@ -336,36 +344,72 @@ const DetailQuestion = ({
           dangerouslySetInnerHTML={{ __html: item?.question }}
         ></div>
         <hr></hr>
-        <span>Choose the correct answer</span>
+        {/* <span>Choose the correct answer</span> */}
         <ul className="choose-answer answer-mode">
           {item?.choices?.map((item1, index1) => (
             <li
               key={item1._id}
               className={
-                data?.hasShowRightAnswer &&
                 data?.questions?.find((t) => t._id === item._id)?.answer ===
-                  item1._id &&
-                "correct-choice"
+                  item1._id && "correct-choice"
               }
             >
-              <FormCheck
-                defaultChecked={
-                  data?.submissions?.find((t) => t.question_id === item._id)
-                    ?.answers === item1._id
-                }
-                label={item1.label}
-                name={`group${item._id}`}
-                type="radio"
-                id={`inline-radio-${item1._id}`}
-              />
+              {!user?.pricing?.abilities?.includes(
+                "62b290ea2c130943d42c8995"
+              ) ? (
+                <FormCheck
+                  label={item1.label}
+                  name={`group${item._id}`}
+                  type="radio"
+                  id={`inline-radio-${item1._id}`}
+                />
+              ) : (
+                <FormCheck
+                  defaultChecked={
+                    data?.submissions?.find((t) => t.question_id === item._id)
+                      ?.answers === item1._id
+                  }
+                  label={item1.label}
+                  name={`group${item._id}`}
+                  type="radio"
+                  id={`inline-radio-${item1._id}`}
+                />
+              )}
             </li>
           ))}
         </ul>
         <hr></hr>
-        {data?.hasShowExplanation && item?.explanation !== "" && (
+        {item?.explanation !== "" && (
           <>
             <h5>Explanation</h5>
-            <Alert message={item?.explanation} type="info" />
+            <Alert
+              message={
+                <div
+                  className="question-content-container"
+                  style={{ position: "relative" }}
+                >
+                  {!user?.pricing?.abilities?.includes(
+                    "62b290ea2c130943d42c8996"
+                  ) ? (
+                    <>
+                      <div
+                        style={{ maxWidth: "810px" }}
+                        className="question-content normal"
+                        dangerouslySetInnerHTML={{ __html: item?.explanation }}
+                      ></div>
+                      <Button>Update your account to our service</Button>
+                    </>
+                  ) : (
+                    <div
+                      style={{ maxWidth: "810px" }}
+                      className="question-content"
+                      dangerouslySetInnerHTML={{ __html: item?.explanation }}
+                    ></div>
+                  )}
+                </div>
+              }
+              type="info"
+            />
             <hr></hr>
           </>
         )}
@@ -387,12 +431,14 @@ const DetailQuestion = ({
           >
             Next question
           </Button>
-          <Button
-            onClick={() => (window.location = `/exams/${data?._id}`)}
-            className="btn-submit"
-          >
-            Try Test Again
-          </Button>
+          {data?.type === "exam" && (
+            <Button
+              onClick={() => (window.location = `/exams/${data?._id}`)}
+              className="btn-submit"
+            >
+              Try Test Again
+            </Button>
+          )}
         </div>
       </div>
     </>

@@ -15,7 +15,7 @@ import {
   getStatisticByIDExam,
   predictNextResultExam,
 } from "app/core/apis/exam";
-import { Spin, Popconfirm } from "antd";
+import { Spin, Popconfirm, Popover } from "antd";
 import { getTimeAndPercentCorrectByID } from "app/utils/ArrayUtils";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -33,6 +33,9 @@ const ExamPage = () => {
   const [statistic, setStatistic] = useState("");
   const [show, setShow] = useState(false);
   const user = useSelector((state) => state.persist.user.user);
+
+  console.log(user);
+
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -49,7 +52,7 @@ const ExamPage = () => {
           window.location = "/404";
         }
         const response1 = await getAllExam("exam");
-        const response2 = await checkExamByIdAndUser(idExam, user.id);
+        const response2 = await checkExamByIdAndUser(idExam, user?.user.id);
         const response5 = await getStatisticByIDExam(idExam);
         const reponse3 = await getHistoryByIdExam(idExam);
         setData(response?.data?.exam.exam[0]);
@@ -77,7 +80,7 @@ const ExamPage = () => {
       if (res.status === 200) {
         const response = await createSession({
           exam: data?._id,
-          user: user.id,
+          user: user?.user.id,
         });
         if (response?.data) {
           window.location = `/exams/${data?._id}/attempt`;
@@ -90,7 +93,7 @@ const ExamPage = () => {
 
   const handleOk = () => {
     // keep doing
-    history.push(`/exams/${statusDoingExam.exam}/attempt?question=1`);
+    history.push(`/exams/${statusDoingExam.exam?._id}/attempt?question=1`);
   };
 
   const handlePredicNextResult = async () => {
@@ -111,7 +114,7 @@ const ExamPage = () => {
     try {
       const response = await createSession({
         exam: idExam,
-        user: user.id,
+        user: user?.user.id,
       });
       if (response?.data) {
         window.location = `/exams/${data?._id}/attempt`;
@@ -186,17 +189,20 @@ const ExamPage = () => {
               </h3>
               {user !== "" && (
                 <div className="my-4 d-flex justify-content-end">
-                  {statusDoingExam?.total !== 0 && (
+                  {/* {statusDoingExam?.total !== 0 && (
                     <Button className="mx-3">View Test History</Button>
-                  )}
-                  {statusDoingExam?.total >= 5 && (
-                    <Button
-                      variant="secondary"
-                      onClick={handlePredicNextResult}
-                    >
-                      View Next Result Prediction
-                    </Button>
-                  )}
+                  )} */}
+                  {statusDoingExam?.total >= 5 &&
+                    user?.pricing?.abilities?.includes(
+                      "62b290ea2c130943d42c8998"
+                    ) && (
+                      <Button
+                        variant="secondary"
+                        onClick={handlePredicNextResult}
+                      >
+                        View Next Result Prediction
+                      </Button>
+                    )}
                 </div>
               )}
             </div>
@@ -270,10 +276,11 @@ const ExamPage = () => {
             <Button variant="primary" className='make-full'>Make full practice</Button>
           </div> */}
       </Col>
-
-      <Col className="layout-container-body exam">
-        <ExamList data={data} location={location} examList={examList} />
-      </Col>
+      {examList !== "" && examList !== [] && (
+        <Col className="layout-container-body exam">
+          <ExamList data={data} location={location} examList={examList} />
+        </Col>
+      )}
     </Container>
   );
 };

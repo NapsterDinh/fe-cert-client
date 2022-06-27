@@ -1,6 +1,10 @@
 import { getHistoryExam } from "app/core/apis/exam";
 import React, { useEffect, useState } from "react";
 import TableTestResult from "./TableTestResult/TableTestResult";
+import { Tabs } from "antd";
+import PracticeResult from "../PracticeResult/PracticeResult";
+import MixingExamTest from "app/pages/SchedulePage/MixingExamTest/MixingExamTest";
+const { TabPane } = Tabs;
 export const TestResult = () => {
   const [data, setData] = useState("");
 
@@ -18,6 +22,9 @@ export const TestResult = () => {
                 type: item.exam.type,
                 result: item.isPassed,
                 createdAt: item.createdAt,
+                no: item.no,
+                totalCorrect: item.totalCorrect,
+                totalQuestions: item.totalQuestions,
                 idExam: item.exam._id,
                 isSessionMorning: item.exam.isSessionMorning
                   ? "Morning"
@@ -34,8 +41,18 @@ export const TestResult = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      <h3 className="my-4">Exam Test History</h3>
-      {data !== "" && <TableTestResult data={data} />}
+      <h3 className="my-4">Tests History</h3>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Exam Test" key="1">
+          {data !== "" && <TableTestResult data={data} />}
+        </TabPane>
+        <TabPane tab="Mixing Exam" key="2">
+          <MixingExamTest />
+        </TabPane>
+        <TabPane tab="Topic Practice" key="3">
+          <PracticeResult />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

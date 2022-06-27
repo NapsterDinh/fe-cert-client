@@ -116,90 +116,71 @@ export const TableStatementHistory = ({ data }) => {
   });
   const columns = [
     {
-      title: "Exam",
-      dataIndex: "title",
-      key: "title",
-      width: "20%",
-      sorter: (a, b) => a.title < b.title,
+      title: "No",
+      dataIndex: "index",
+      key: "index",
+      width: "5%",
+      sorter: (a, b) => a.index < b.index,
       sortDirections: ["descend", "ascend"],
-      ...getColumnSearchProps("title"),
+      ...getColumnSearchProps("index"),
+    },
+    {
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
+      width: "10%",
+      sorter: (a, b) => a.code < b.code,
+      sortDirections: ["descend", "ascend"],
+      ...getColumnSearchProps("code"),
+    },
+    {
+      title: "Price($)",
+      dataIndex: "price",
+      key: "price",
+      width: "5%",
+      sorter: (a, b) => a.price < b.price,
+      sortDirections: ["descend", "ascend"],
+      ...getColumnSearchProps("price"),
+    },
+    {
+      title: "Duration(days)",
+      dataIndex: "duration",
+      key: "duration",
+      align: "center",
+      width: "5%",
+      sorter: (a, b) => a.duration < b.duration,
+      sortDirections: ["descend", "ascend"],
+      ...getColumnSearchProps("duration"),
     },
     {
       className: "tag-col",
-      title: "Session",
-      dataIndex: "isSessionMorning",
-      key: "isSessionMorning",
-      width: "5%",
-      sorter: (a, b) => a.isSessionMorning < b.isSessionMorning,
+      title: "Service",
+      dataIndex: "service",
+      key: "service",
+      width: "10%",
+      sorter: (a, b) => a.service < b.service,
       sortDirections: ["descend", "ascend"],
-      render: (isSessionMorning) => {
+      render: (service) => {
         return (
-          <Tag color={isSessionMorning === "Morning" ? "#2db7f5" : "#108ee9"}>
-            {isSessionMorning}
+          <Tag color={service === "Premium" ? "#2db7f5" : "#108ee9"}>
+            {service}
           </Tag>
         );
       },
       filters: [
         {
-          text: "Morning",
-          value: "Morning",
+          text: "Premium",
+          value: "Premium",
         },
         {
-          text: "Afternoon",
-          value: "Afternoon",
+          text: "Premium",
+          value: "Premium",
         },
       ],
-      onFilter: (value, record) => record.isSessionMorning.indexOf(value) === 0,
+      onFilter: (value, record) => record.service.indexOf(value) === 0,
     },
     {
-      className: "tag-col",
-      title: "Result",
-      dataIndex: "isPassed",
-      key: "isPassed",
-      width: "5%",
-      sorter: (a, b) => a.isPassed < b.isPassed,
-      sortDirections: ["descend", "ascend"],
-      render: (isPassed) => {
-        return (
-          <Tag color={isPassed === "Pass" ? "#87d068" : "#f50"}>{isPassed}</Tag>
-        );
-      },
-      filters: [
-        {
-          text: "Pass",
-          value: "Pass",
-        },
-        {
-          text: "Failed",
-          value: "Failed",
-        },
-      ],
-      onFilter: (value, record) => record.isSessionMorning.indexOf(value) === 0,
-    },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    //   width: "5%",
-    //   sorter: (a, b) => a.status < b.status,
-    //   sortDirections: ["descend", "ascend"],
-    //   render: (status) => {
-    //     return <span>{status}</span>;
-    //   },
-    //   filters: [
-    //     {
-    //       text: "Done",
-    //       value: "done",
-    //     },
-    //     {
-    //       text: "Not submited",
-    //       value: "notSubmited",
-    //     },
-    //   ],
-    //   onFilter: (value, record) => record.isSessionMorning.indexOf(value) === 0,
-    // },
-    {
-      title: "Start Time",
+      title: "Buy Time",
       dataIndex: "createdAt",
       key: "createdAt",
       width: "10%",
@@ -214,26 +195,45 @@ export const TableStatementHistory = ({ data }) => {
       },
     },
     {
-      title: "Detail",
-      key: "action",
-      width: "10%",
-      align: "center",
-      render: (_, record) => {
+      className: "tag-col",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: "5%",
+      sorter: (a, b) => a.status < b.status,
+      sortDirections: ["descend", "ascend"],
+      render: (status) => {
         return (
-          <Space size="middle">
-            <Button
-              onClick={() =>
-                history.push(
-                  `/exams/${record.idExam}/attempt/${record.id}/result`
-                )
-              }
-            >
-              View Details
-            </Button>
-          </Space>
+          <Tag color={status === "Done" ? "#87d068" : "#f50"}>{status}</Tag>
         );
       },
+      filters: [
+        {
+          text: "Done",
+          value: "Done",
+        },
+        {
+          text: "Done",
+          value: "Done",
+        },
+      ],
+      onFilter: (value, record) => record.status.indexOf(value) === 0,
     },
+
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   width: "10%",
+    //   align: "center",
+    //   render: (_, record) => {
+    //     return (
+    //       <Space size="middle">
+    //         <Button>View</Button>
+    //         <Button>Export</Button>
+    //       </Space>
+    //     );
+    //   },
+    // },
   ];
   return (
     <Card border="light" className="table-wrapper table-responsive shadow-sm">

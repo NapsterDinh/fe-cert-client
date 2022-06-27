@@ -2,14 +2,26 @@ import CountDownTimer from "app/components/CountDownTimer";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-const QuestionList = ({ data, currentOrder, statTime, submissionArray, 
-    selected, saveSelectedChoice }) => {
+
+const QuestionList = ({
+  data,
+  currentOrder,
+  statTime,
+  submissionArray,
+  selected,
+  idExam,
+  saveSelectedChoice,
+  onSubmitExam
+}) => {
+  
+
   return (
     <div className="sticky-sidebar">
       <div className="post-index hidden-sm-down">
         <div className="section-title-line">
           <h5 className="text-uppercase">Question List</h5>
           <CountDownTimer
+            onSubmitExam={onSubmitExam}
             targetDate={
               new Date(
                 new Date(statTime).getTime() + parseInt(data?.time) * 1000 - 1
@@ -41,8 +53,14 @@ const QuestionList = ({ data, currentOrder, statTime, submissionArray,
   );
 };
 
-const QuestionItem = ({ item, index, currentOrder, 
-    submissionArray, selected, saveSelectedChoice }) => {
+const QuestionItem = ({
+  item,
+  index,
+  currentOrder,
+  submissionArray,
+  selected,
+  saveSelectedChoice,
+}) => {
   let { idExam } = useParams();
   const history = useHistory();
   const temp = submissionArray?.find((t) => t.question_id === item._id);

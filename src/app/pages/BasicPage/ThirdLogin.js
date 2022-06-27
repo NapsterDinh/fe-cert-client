@@ -1,101 +1,96 @@
-import FacebookLogin from 'react-facebook-login';
-import GoogleLogin from 'react-google-login';
+import FacebookLogin from "react-facebook-login";
+import GoogleLogin from "react-google-login";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { Button} from '@themesberg/react-bootstrap';
-import { loginByFacebook, loginByGoogle } from 'app/core/apis/user';
-import configuration from 'app/configuration';
-import { useDispatch } from 'react-redux';
-import { updateUser } from 'app/store/userReducer';
-import { useLocation, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { Button } from "@themesberg/react-bootstrap";
+import { loginByFacebook, loginByGoogle } from "app/core/apis/user";
+import configuration from "app/configuration";
+import { useDispatch } from "react-redux";
+import { updateUser } from "app/store/userReducer";
+import {
+  useLocation,
+  useHistory,
+} from "react-router-dom/cjs/react-router-dom.min";
 
-const clientId = '588336887447-h306o0g8rsfr9o2421d749sgk6hu916k.apps.googleusercontent.com'
-const appId = '840430540176218'
+const clientId =
+  "588336887447-h306o0g8rsfr9o2421d749sgk6hu916k.apps.googleusercontent.com";
+const appId = "388448022239409";
 
 const ThirdLogin = () => {
-    const dispatch =  useDispatch()
-    const location =  useLocation()
-    const history = useHistory()
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
 
-    const responseFacebook = async(response) => {
-        console.log(response);
-        try {
-            const result =  await loginByFacebook({
-                ...response,
-                picture: response?.picture?.data?.url
-            })
-            if(result.status === 200)
-            {
-                //set token
-                configuration.setApiRequestToken(result.data.token)
-                dispatch(updateUser(result.data))
-                if(location?.state !== undefined)
-                {
-                    history.push(`${location.state.from}${location.state.search}`)
-                }
-                else
-                {
-                    history.push('/')
-                }
-            }
-        } catch (error) {
+  const responseFacebook = async (response) => {
+    try {
+      const result = await loginByFacebook({
+        ...response,
+        picture: response?.picture?.data?.url,
+      });
+      if (result.status === 200) {
+        //set token
+        configuration.setApiRequestToken(result.data.tokens);
+        dispatch(updateUser(result.data));
+        if (location?.state !== undefined) {
+          history.push(`${location.state.from}${location.state.search}`);
+        } else {
+          history.push("/");
         }
-    }
+      }
+    } catch (error) {}
+  };
 
-    const onSuccess = async(response) => {
-        console.log(response);
-        try {
-            const result =  await loginByGoogle(response)
-            if(result.status === 200)
-            {
-                //set token
-                configuration.setApiRequestToken(result.data.token)
-                dispatch(updateUser(result.data))
-                if(location?.state !== undefined)
-                {
-                    history.push(`${location.state.from}${location.state.search}`)
-                }
-                else
-                {
-                    history.push('/')
-                }
-            }
-        } catch (error) {
+  const onSuccess = async (response) => {
+    try {
+      const result = await loginByGoogle(response);
+      if (result.status === 200) {
+        //set token
+        configuration.setApiRequestToken(result.data.tokens);
+        dispatch(updateUser(result.data));
+        if (location?.state !== undefined) {
+          history.push(`${location.state.from}${location.state.search}`);
+        } else {
+          history.push("/");
         }
-    }
+      }
+    } catch (error) {}
+  };
 
-    const onFailure = (response) => {
-    }
+  const onFailure = (response) => {};
 
-
-    return (
-        <>
-            <div className="mt-3 mb-4 text-center">
-                <span className="fw-normal">or login with</span>
-            </div>
-            <div className="d-flex justify-content-center my-4">
-                <FacebookLogin
-                    id="buttonFB"
-                    appId={appId}
-                    fields="name,email,picture"
-                    callback={responseFacebook}
-                    textButton=""
-                    icon={'fa-facebook'}
-                />
-                <GoogleLogin
-                clientId={clientId}
-                render={renderProps => (
-                    <Button type='button' variant="outline-light" className="btn-icon-only btn-pill text-facebook me-2" onClick={renderProps.onClick}>
-                        <FontAwesomeIcon icon={faGoogle} />
-                    </Button>
-                )}
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                cookiePolicy='single_host_origin'
-                />
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <div className="mt-3 mb-4 text-center">
+        <span className="fw-normal">or login with</span>
+      </div>
+      <div className="d-flex justify-content-center my-4">
+        <FacebookLogin
+          id="buttonFB"
+          appId={appId}
+          fields="name,email,picture"
+          callback={responseFacebook}
+          icon={<FontAwesomeIcon icon={faFacebook} />}
+          textButton={"Continue with Google"}
+        />
+        <GoogleLogin
+          clientId={clientId}
+          render={(renderProps) => (
+            <Button
+              className="socialBtn"
+              block
+              onClick={renderProps.onClick}
+            >
+              {<FontAwesomeIcon icon={faGoogle} />}
+              Continue with Google
+            </Button>
+          )}
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+          cookiePolicy="single_host_origin"
+        />
+      </div>
+    </>
+  );
+};
 
 export default ThirdLogin;

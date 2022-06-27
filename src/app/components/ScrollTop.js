@@ -1,6 +1,5 @@
-import { Button } from "@themesberg/react-bootstrap";
+import { faCircleUp } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUp } from '@fortawesome/free-regular-svg-icons'
 const ScrollTop = () => {
     return ( 
         <a href="#root" className='scroll-top'>

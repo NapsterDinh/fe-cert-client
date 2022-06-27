@@ -7,16 +7,19 @@ export const MixingExamTest = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getHistoryExam('normal_practice');
+        const response = await getHistoryExam("normal_practice");
         if (response.status === 200) {
           setData(
             response.data.exam
+              .filter((item) => item.exam.type === "normal_practice")
               .map((item) => ({
                 id: item._id,
                 title: item.exam.title,
                 type: item.exam.type,
                 result: item.isPassed,
                 createdAt: item.createdAt,
+                totalCorrect: item.totalCorrect,
+                totalQuestions: item.totalQuestions,
                 idExam: item.exam._id,
                 isSessionMorning: item.exam.isSessionMorning
                   ? "Morning"
@@ -32,10 +35,11 @@ export const MixingExamTest = () => {
   }, []);
 
   return (
-    <div style={{ width: "100%" }}>
-      <h3 className="my-4">Mixing Exam Test History</h3>
-      {data !== "" && <TableMixingExamTest data={data} />}
-    </div>
+    // <div style={{ width: "100%" }}>
+    //   <h3 className="my-4">Mixing Exam Test History</h3>
+    //   {data !== "" && <TableMixingExamTest data={data} />}
+    // </div>
+    <>{data !== "" && <TableMixingExamTest data={data} />}</>
   );
 };
 

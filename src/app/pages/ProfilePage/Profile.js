@@ -10,8 +10,8 @@ import { NavLink, Route, Switch } from "react-router-dom";
 import PracticeResult from "./PracticeResult/PracticeResult";
 import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
 import StatementHistory from "./StatementHistory/StatementHistory";
-import MixingExamTest from "./MixingExamTest/MixingExamTest";
-import { generateAvatar } from 'app/utils/StringUtils'
+import MixingExamTest from "../SchedulePage/MixingExamTest/MixingExamTest";
+import { generateAvatar } from "app/utils/StringUtils";
 import "./Profile.css";
 import TestResult from "./TestResult/TestResult";
 
@@ -19,6 +19,7 @@ const ProfilePage = ({ name }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const user = useSelector((state) => state.persist.user?.user);
+  console.log(user);
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -53,11 +54,11 @@ const ProfilePage = ({ name }) => {
             <Col lg={8} className="info-container d-flex">
               <div className="avatar-container">
                 <Avatar
-                className="avatar-private-profile"
-                size={300}
+                  className="avatar-private-profile"
+                  size={300}
                   style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                 >
-                  {generateAvatar(user?.name)}
+                  {generateAvatar(user?.user?.name)}
                 </Avatar>
                 {/* <img
                   style={{ width: "300px", borderRadius: "50%" }}
@@ -65,8 +66,30 @@ const ProfilePage = ({ name }) => {
                   alt="avatar"
                 /> */}
               </div>
-              <div className="mx-4 short-user-info d-flex align-center align-items-center">
-                <h2>{user?.name}</h2>
+              <div
+                className="mx-4 
+              flex-col
+              justify-content-center
+              short-user-info d-flex align-center align-items-center"
+                style={{ flexDirection: "column" }}
+              >
+                <h2 style={{ width: "100%" }}>{user?.user?.name}</h2>
+                {user?.pricing !== undefined && (
+                  <div>
+                    <h4>
+                      Pricing:{" "}
+                      <strong style={{ fontWeight: "700" }}>
+                        {user?.pricing?.pricing?.name}
+                      </strong>
+                    </h4>
+                    <p>
+                      Expired time:{" "}
+                      <strong style={{ fontWeight: "700" }}>
+                        {new Date(user?.pricing?.expireDate).toLocaleString()}{" "}
+                      </strong>
+                    </p>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>
@@ -82,25 +105,11 @@ const ProfilePage = ({ name }) => {
                 Overview
               </NavLink>
               <NavLink
-                to={"/user/profile/exam-tests-history"}
+                to={"/user/profile/tests-history"}
                 className="nav-link btn"
                 activeClassName="active"
               >
-                Exam Test History
-              </NavLink>
-              <NavLink
-                to={"/user/profile/practice-tests-history"}
-                className="nav-link btn"
-                activeClassName="active"
-              >
-                Practice Tests History
-              </NavLink>
-              <NavLink
-                to={"/user/profile/mixing-exam-tests-history"}
-                className="nav-link btn"
-                activeClassName="active"
-              >
-                Mixing Exam Tests History
+                Test History
               </NavLink>
               <NavLink
                 to={"/user/profile/statement-history"}
@@ -110,23 +119,6 @@ const ProfilePage = ({ name }) => {
                 Statement History
               </NavLink>
             </Nav>
-            {/* <Dropdown>
-              <Dropdown.Toggle
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "white",
-                  color: "#262B40",
-                }}
-                id="dropdown-basic"
-              >
-                <FontAwesomeIcon icon={faEllipsis} />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">Edit profile</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Report</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
           </div>
         </Container>
       </div>
@@ -134,20 +126,12 @@ const ProfilePage = ({ name }) => {
         <Container>
           <Switch>
             <Route
-              path={"/user/profile/exam-tests-history"}
+              path={"/user/profile/tests-history"}
               render={(props) => <TestResult {...props} />}
-            />
-            <Route
-              path={"/user/profile/practice-tests-history"}
-              render={(props) => <PracticeResult {...props} />}
             />
             <Route
               path={"/user/profile/statement-history"}
               render={(props) => <StatementHistory {...props} />}
-            />
-            <Route
-              path={"/user/profile/mixing-exam-tests-history"}
-              render={(props) => <MixingExamTest {...props} />}
             />
             <Route {...Routes.OverviewPage} />
           </Switch>

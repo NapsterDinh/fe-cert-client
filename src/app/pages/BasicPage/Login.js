@@ -1,45 +1,36 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
   faEnvelope,
   faUnlockAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFacebookF,
-  faGithub,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import {
-  Col,
-  Row,
-  Form,
-  Card,
   Button,
-  FormCheck,
+  Card,
+  Col,
   Container,
+  Form,
   InputGroup,
+  Row,
 } from "@themesberg/react-bootstrap";
-import { Link } from "react-router-dom";
 import signInBg from "app/assets/img/illustrations/signin.svg";
-
-import { Routes } from "app/routes";
-import { ErrorMessage, Formik } from "formik";
-import * as Yup from "yup";
-
-import { login } from "app/core/apis/user";
-import { updateUser } from "app/store/userReducer";
 import configuration from "app/configuration";
+import { login } from "app/core/apis/user";
+import { Routes } from "app/routes";
+import { updateUser } from "app/store/userReducer";
+import { ErrorMessage, Formik } from "formik";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import * as Yup from "yup";
 import ThirdLogin from "./ThirdLogin";
 
 const schema = Yup.object().shape({
   username: Yup.string()
-    .required("Username is required")
-    .min(8, "Username muse be at least 6 characters"),
-  password: Yup.string().required("Password is required"),
+    .required("Email is required")
+    .email("Format must be an e-mail")
+    .trim(),
+  password: Yup.string().trim().required("Password is required"),
 });
 
 const LoginPage = () => {
@@ -55,8 +46,10 @@ const LoginPage = () => {
     });
 
     if (result.status === 200) {
+      console.log(result);
       //set token
       configuration.setApiRequestToken(result.data.tokens);
+      
       dispatch(updateUser(result.data));
       if (location?.state !== undefined) {
         history.push(`${location.state.from}${location.state.search}`);

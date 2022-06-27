@@ -1,31 +1,32 @@
-import { getHistoryExam } from "app/core/apis/exam";
+import { getStatementHistoryByIdUser } from "app/core/apis/pricing";
 import React, { useEffect, useState } from "react";
 import TableStatementHistory from "./TableStatementHistory/TableStatementHistory";
+
+
 export const StatementHistory = () => {
   const [data, setData] = useState("");
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await getHistoryExam();
+        const response = await getStatementHistoryByIdUser();
         if (response.status === 200) {
           setData(
-            response.data.exam
-              .filter((item) => item.exam.type === "exam")
-              .map((item) => ({
-                id: item._id,
-                title: item.exam.title,
-                type: item.exam.type,
-                result: item.isPassed,
-                createdAt: item.createdAt,
-                idExam: item.exam._id,
-                isSessionMorning: item.exam.isSessionMorning
-                  ? "Morning"
-                  : "Afternoon",
-                isPassed: item.isPassed ? "Pass" : "Failed",
-                status: item.status,
+            response?.data?.userPricing
+              ?.sort(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+              )
+              .map((item, index) => ({
+                ...item,
+                id: item?._id,
+                code: item?._id,
+                index: index,
+                service: item?.pricing?.name,
+                price: item?.price?.$numberDecimal,
+                duration: item?.pricing?.duration
               }))
-              .filter((item) => item.status !== "pending")
           );
         }
       } catch (error) {}

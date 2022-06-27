@@ -125,6 +125,15 @@ export const TableTestResult = ({ data }) => {
       ...getColumnSearchProps("title"),
     },
     {
+      title: "No",
+      dataIndex: "no",
+      key: "no",
+      width: "5%",
+      sorter: (a, b) => a.no < b.no,
+      sortDirections: ["descend", "ascend"],
+      ...getColumnSearchProps("no"),
+    },
+    {
       className: "tag-col",
       title: "Session",
       dataIndex: "isSessionMorning",
@@ -159,9 +168,22 @@ export const TableTestResult = ({ data }) => {
       width: "5%",
       sorter: (a, b) => a.isPassed < b.isPassed,
       sortDirections: ["descend", "ascend"],
-      render: (isPassed) => {
+      render: (isPassed, item) => {
         return (
-          <Tag color={isPassed === "Pass" ? "#87d068" : "#f50"}>{isPassed}</Tag>
+          <>
+            <Tag
+              style={{ margin: "auto 0" }}
+              color={isPassed === "Pass" ? "#87d068" : "#f50"}
+            >
+              <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+                {isPassed}
+              </p>
+            </Tag>
+            <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+              {item.totalCorrect}/{item.totalQuestions}
+            </p>
+            <p style={{ marginBottom: "0px", fontSize: "14px" }}>questions</p>
+          </>
         );
       },
       filters: [

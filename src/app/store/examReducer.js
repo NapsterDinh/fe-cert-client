@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  exam: '',
+  exam: "",
+  currentDoingExam: "",
 };
 
 export const examSlice = createSlice({
@@ -10,10 +11,14 @@ export const examSlice = createSlice({
   reducers: {
     updateExam: (state, action) => {
       state.exam = action?.payload;
-      return state
-    }
+      return state;
+    },
+    updateCurrentExam: (state, action) => {
+      state.currentDoingExam = action?.payload;
+      return state;
+    },
   },
 });
-export const { updateExam } = examSlice.actions;
+export const { updateExam, updateCurrentExam } = examSlice.actions;
 
 export default examSlice.reducer;

@@ -4,7 +4,6 @@ import StudyRoadItem from "app/components/StudyRoadItem";
 import { topicsDescription } from "app/data/topic";
 import { getAllTopic } from "app/core/apis/topic";
 
-
 const StudyRoad = () => {
   const [data, setData] = useState("");
 
@@ -14,12 +13,14 @@ const StudyRoad = () => {
         const response = await getAllTopic();
         if (response?.status === 200) {
           setData(
-            response?.data?.topic.map((item) => ({
-              ...item,
-              description: decodeURIComponent(
-                escape(window.atob(item?.description))
-              ),
-            }))
+            response?.data?.topic
+              .map((item) => ({
+                ...item,
+                description: decodeURIComponent(
+                  escape(window.atob(item?.description))
+                ),
+              }))
+              ?.filter((t) => t?.status === "public")
           );
         }
       } catch (error) {

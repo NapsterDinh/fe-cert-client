@@ -155,7 +155,6 @@ export const TableExam = ({ data }) => {
         new Date(a.eventDate).toLocaleDateString() <
         new Date(b.eventDate).toLocaleDateString(),
       sortDirections: ["descend", "ascend"],
-      defaultSortOrder: "descend",
       render: (eventDate) => {
         return <span>{new Date(eventDate).toLocaleDateString()}</span>;
       },

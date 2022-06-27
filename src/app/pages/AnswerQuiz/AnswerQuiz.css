@@ -1,8 +1,22 @@
-.layout-container-body.answer
-{
-    flex: 1 0;
+.layout-container-body.answer {
+  flex: 1 0;
 }
-.tabs-answer
-{
-    width: 100%;
+.tabs-answer {
+  width: 100%;
+}
+.layout-container-top.quiz
+  .count-question
+  .question-content-container
+  .question-content.normal {
+  max-height: 200px;
+  overflow-y: hidden;
+  filter: blur(8px);
+}
+.layout-container-top.quiz .count-question .question-content-container button {
+  position: absolute;
+  top: 50%;
+  left: 34%;
+}
+.layout-container-top.quiz .count-question .ant-alert-info {
+  border-radius: 10px;
 }

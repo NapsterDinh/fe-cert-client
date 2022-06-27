@@ -135,7 +135,7 @@ export const TableMixingExamTest = ({ data }) => {
       render: (isSessionMorning) => {
         return (
           <Tag color={isSessionMorning === "Morning" ? "#2db7f5" : "#108ee9"}>
-            {isSessionMorning}
+            {"Morning"}
           </Tag>
         );
       },
@@ -159,9 +159,22 @@ export const TableMixingExamTest = ({ data }) => {
       width: "5%",
       sorter: (a, b) => a.isPassed < b.isPassed,
       sortDirections: ["descend", "ascend"],
-      render: (isPassed) => {
+      render: (isPassed, item) => {
         return (
-          <Tag color={isPassed === "Pass" ? "#87d068" : "#f50"}>{isPassed}</Tag>
+          <>
+            <Tag
+              style={{ margin: "auto 0" }}
+              color={isPassed === "Pass" ? "#87d068" : "#f50"}
+            >
+              <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+                {isPassed}
+              </p>
+            </Tag>
+            <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+              {item.totalCorrect}/{item.totalQuestions}
+            </p>
+            <p style={{ marginBottom: "0px", fontSize: "14px" }}>questions</p>
+          </>
         );
       },
       filters: [

@@ -1,8 +1,8 @@
-
 .why-fe-vietnam .why-fe-title {
   font-weight: 900;
   padding-top: 100px;
   font-size: 60px;
+  margin-bottom: 40px;
 }
 .why-fe-vietnam {
   flex-direction: column;
@@ -13,9 +13,8 @@
 .why-fe-vietnam.module h1 {
   color: white;
 }
-.why-fe-vietnam.module h5
-{
-  color: #FFC0C7;
+.why-fe-vietnam.module h5 {
+  color: #ffc0c7;
 }
 .why-fe-vietnam.module p {
   color: white;

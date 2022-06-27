@@ -48,7 +48,9 @@ const PracticePage = () => {
             Please use it as a test preparation."
           </pre>
         </div>
-        <Tabs defaultActiveKey="1" onChange={onChange} destroyInactiveTabPane>
+        <Tabs 
+        className="tab-practice"
+        defaultActiveKey="1" onChange={onChange} destroyInactiveTabPane>
           <TabPane tab="Questions by specifying a field" key="2">
             <TabPane2 allTopic={allTopic} />
           </TabPane>

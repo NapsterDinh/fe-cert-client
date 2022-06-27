@@ -1,0 +1,10 @@
+.mb-4.error .input-group {
+  outline-color: transparent !important;
+  border-color: red!important;
+}
+.mb-4.error .input-group:focus-within {
+  outline-color: transparent !important;
+}
+.mb-4.error .invalid-feedback {
+  display: block;
+}

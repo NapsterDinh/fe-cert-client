@@ -54,12 +54,44 @@
   flex-direction: column;
   width: 100%;
   background-color: white;
-  margin-top: 60px;
+  margin-top: 100px !important;
 }
 .compared-feature-container .compared-feature {
   margin: 40px 0px !important;
 }
 .compared-feature-container h1 {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 80px;
+}
+
+.td {
+  padding: 10px;
+  border: solid 1px #ddd;
+}
+.td .td-name,
+.th-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.td-row-title p {
+  margin-bottom: 0px;
+}
+.td-tick {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.td-tick .td-green-tick {
+  color: green;
+  height: 40px;
+  width: 40px;
+}
+
+.td-tick .td-red-tick {
+  color: red;
+  height: 40px;
+  width: 40px;
+}
+.btn-padding {
+  padding: 15px 50px;
 }

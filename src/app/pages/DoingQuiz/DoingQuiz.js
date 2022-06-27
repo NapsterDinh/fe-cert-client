@@ -1,18 +1,22 @@
 import { Col, Container } from "@themesberg/react-bootstrap";
-import { getCurrentExam, updateAnswer } from "app/core/apis/exam";
-import { getCurrentRandomSession } from "app/core/apis/practice";
+import { Spin } from "antd";
+import { getCurrentExam, submitResult, updateAnswer } from "app/core/apis/exam";
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import DetailQuestion from "./DetailQuestionsQuiz";
 import QuestionList from "./QuestionListQuiz";
+import { useRef } from "react";
 
 const DoingQuiz = () => {
   const [data, setData] = useState("");
   const [questionShow, setQuestionShow] = useState("");
+  const history = useHistory();
   const [submissionArray, setSubmissionArray] = useState([]);
   const [statTime, setStartTime] = useState("");
   const [selected, setSelected] = useState(undefined);
   const location = useLocation();
+  const [isTimeOut, setIsTimeOut] = useState(false);
+  const isFirstCallSubmit = useRef(false);
   let { idExam, practice } = useParams();
 
   const currentOrder =
@@ -46,11 +50,12 @@ const DoingQuiz = () => {
     (async () => {
       try {
         let response = "";
-        if (practice === 0) {
-          response = await getCurrentExam(idExam);
-        } else {
-          response = await getCurrentRandomSession();
-        }
+        // if (practice === 0) {
+        //   response = await getCurrentExam(idExam);
+        // } else {
+        //   response = await getCurrentRandomSession();
+        // }
+        response = await getCurrentExam(idExam);
         setData({
           ...response?.data?.exam.exam,
           questions: response?.data?.exam.exam?.questions.map((item) => ({
@@ -89,31 +94,56 @@ const DoingQuiz = () => {
     }
   }, [data, currentOrder]);
 
+  const onSubmitExam = async () => {
+    setIsTimeOut(true);
+    const submmission = {
+      exam: idExam,
+    };
+    try {
+      if (isFirstCallSubmit.current === false) {
+        isFirstCallSubmit.current = true;
+        const res = await submitResult(submmission);
+        history.push(`/exams/${idExam}/attempt/${res.data.exam}/result`);
+      }
+    } catch (error) {}
+  };
+
   return (
-    <Container className="d-flex container-card">
-      <Col className="layout-container-body quiz">
-        <QuestionList
-          submissionArray={submissionArray}
-          saveSelectedChoice={saveSelectedChoice}
-          selected={selected}
-          data={data}
-          currentOrder={currentOrder}
-          statTime={statTime}
-        />
-      </Col>
-      <Col className="layout-container-top quiz">
-        <DetailQuestion
-          idExam={idExam}
-          item={questionShow}
-          saveSelectedChoice={saveSelectedChoice}
-          data={data}
-          submissionArray={submissionArray}
-          setSubmissionArray={setSubmissionArray}
-          selected={selected}
-          setSelected={setSelected}
-        />
-      </Col>
-    </Container>
+    <>
+      <Spin
+        className="spin-doing-quiz"
+        style={{ maxHeight: "none" }}
+        spinning={isTimeOut}
+        tip="Loading..."
+      >
+        <Container className="d-flex container-card">
+          <Col className="layout-container-body quiz">
+            <QuestionList
+              submissionArray={submissionArray}
+              saveSelectedChoice={saveSelectedChoice}
+              selected={selected}
+              data={data}
+              idExam={idExam}
+              currentOrder={currentOrder}
+              statTime={statTime}
+              onSubmitExam={onSubmitExam}
+            />
+          </Col>
+          <Col className="layout-container-top quiz">
+            <DetailQuestion
+              idExam={idExam}
+              item={questionShow}
+              saveSelectedChoice={saveSelectedChoice}
+              data={data}
+              submissionArray={submissionArray}
+              setSubmissionArray={setSubmissionArray}
+              selected={selected}
+              setSelected={setSelected}
+            />
+          </Col>
+        </Container>
+      </Spin>
+    </>
   );
 };
 

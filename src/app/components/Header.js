@@ -3,7 +3,7 @@ import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, message, Upload, Avatar } from "antd";
-import { generateAvatar } from 'app/utils/StringUtils'
+import { generateAvatar } from "app/utils/StringUtils";
 import {
   Button,
   Dropdown,
@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const Header = () => {
-  const user = useSelector((state) => state.persist.user?.user);
+  const user = useSelector((state) => state.persist.user?.user?.user);
   const dispatch = useDispatch();
   const [notifications, setNotifications] = useState(NOTIFICATIONS_DATA);
   const areNotificationsRead = notifications.reduce(
@@ -102,24 +102,8 @@ const Header = () => {
                       </Form.Group>
                     </Form>
                   </div> */}
-              {user === "" ? (
-                <>
-                  <Button
-                    className="mx-3"
-                    onClick={() => (window.location = "/login")}
-                    variant="primary"
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    className="mx-3"
-                    onClick={() => (window.location = "/register")}
-                    variant="secondary"
-                  >
-                    Sign up
-                  </Button>
-                </>
-              ) : (
+              {user !== "" && user !== undefined ? 
+              (
                 <Nav className="align-items-center">
                   {/* <Dropdown as={Nav.Item} onToggle={markNotificationsAsRead}>
                     <Dropdown.Toggle
@@ -220,6 +204,25 @@ const Header = () => {
                     </Dropdown.Menu>
                   </Dropdown>
                 </Nav>
+              )
+              :
+              (
+                <>
+                  <Button
+                    className="mx-3"
+                    onClick={() => (window.location = "/login")}
+                    variant="primary"
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    className="mx-3"
+                    onClick={() => (window.location = "/register")}
+                    variant="secondary"
+                  >
+                    Sign up
+                  </Button>
+                </>
               )}
             </div>
           </Nav>

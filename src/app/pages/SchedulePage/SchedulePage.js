@@ -26,7 +26,11 @@ const SchedulePage = () => {
         setData(
           response?.data?.exam
             ?.filter((item) => item.isPublic === "Public")
-
+            ?.sort(
+              (a, b) =>
+                new Date(b.eventDate).getTime() -
+                new Date(a.eventDate).getTime()
+            )
             .map((item, index) => ({
               ...item,
               id: item._id,
