@@ -17,6 +17,7 @@ import {
   countPercentAnswerRate,
   countAnswerRatePerTopic,
 } from "app/utils/ArrayUtils";
+import { updateLoading } from "app/store/loadingReducer";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -37,11 +38,10 @@ const AnswerQuiz = () => {
   let { hashIdExamSession } = useParams();
   const [loading, setLoading] = useState(false);
 
-  console.log(user);
-
   useEffect(() => {
     (async () => {
       try {
+        dispatch(updateLoading(true));
         setLoading(true);
         const response = await getResultByIdUserExam({
           userExam: hashIdExamSession,
@@ -75,6 +75,7 @@ const AnswerQuiz = () => {
         console.log(error);
       } finally {
         setLoading(false);
+        dispatch(updateLoading(false));
       }
     })();
   }, []);

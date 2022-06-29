@@ -58,6 +58,7 @@ const TabPane2 = ({ allTopic }) => {
     setValue,
     reset,
     getValues,
+    setError,
     clearErrors,
     formState: { errors },
   } = useForm({
@@ -93,6 +94,17 @@ const TabPane2 = ({ allTopic }) => {
       if (user === "") {
         window.location = "/login";
       }
+
+      if (
+        values?.numberOfQuestions >
+        allTopic.find((t) => t?._id === values.objectives[0]).questions.length
+      ) {
+        setError("numberOfQuestions", {
+          message: "Number of question is more than number of valid questions",
+        });
+        return;
+      }
+
       const response = await createRandomTopicSession({
         topics: values.objectives,
         numberOfQuestions: values.numberOfQuestions,
@@ -105,8 +117,6 @@ const TabPane2 = ({ allTopic }) => {
       }
     } catch (error) {}
   };
-
-  console.log(user);
 
   return (
     <>

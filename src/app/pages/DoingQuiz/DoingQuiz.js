@@ -6,6 +6,8 @@ import { useLocation, useParams, useHistory } from "react-router-dom";
 import DetailQuestion from "./DetailQuestionsQuiz";
 import QuestionList from "./QuestionListQuiz";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { updateLoading } from "app/store/loadingReducer";
 
 const DoingQuiz = () => {
   const [data, setData] = useState("");
@@ -15,6 +17,7 @@ const DoingQuiz = () => {
   const [statTime, setStartTime] = useState("");
   const [selected, setSelected] = useState(undefined);
   const location = useLocation();
+  const dispatch = useDispatch();
   const [isTimeOut, setIsTimeOut] = useState(false);
   const isFirstCallSubmit = useRef(false);
   let { idExam, practice } = useParams();
@@ -49,6 +52,7 @@ const DoingQuiz = () => {
   useEffect(() => {
     (async () => {
       try {
+        dispatch(updateLoading(true));
         let response = "";
         // if (practice === 0) {
         //   response = await getCurrentExam(idExam);
@@ -68,7 +72,10 @@ const DoingQuiz = () => {
         });
         setSubmissionArray(response?.data?.exam.submissions);
         setStartTime(response?.data?.exam?.createdAt);
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        dispatch(updateLoading(false));
+      }
     })();
   }, []);
 

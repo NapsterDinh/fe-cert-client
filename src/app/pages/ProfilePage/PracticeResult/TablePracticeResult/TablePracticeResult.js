@@ -143,10 +143,10 @@ export const TablePracticeResult = ({ data }) => {
                 {isPassed}
               </p>
             </Tag>
-            <p style={{ marginBottom: "0px", fontSize: "14px" }}>
+            {/* <p style={{ marginBottom: "0px", fontSize: "14px" }}>
               {item.totalCorrect}/{item.totalQuestions}
             </p>
-            <p style={{ marginBottom: "0px", fontSize: "14px" }}>questions</p>
+            <p style={{ marginBottom: "0px", fontSize: "14px" }}>questions</p> */}
           </>
         );
       },
