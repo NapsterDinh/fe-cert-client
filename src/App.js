@@ -2,6 +2,7 @@ import PopUpCurrentExam from "app/components/PopUpCurrentExam/PopUpCurrentExam";
 import PreloaderNoProps from "app/components/PreloaderNoProps";
 import ScrollTop from "app/components/ScrollTop";
 import { Routes } from "app/routes";
+import { Spin } from "antd";
 import "app/scss/_App.scss";
 //components
 import {
@@ -10,17 +11,23 @@ import {
   RouteWithSidebarNeedLogin,
 } from "app/utils/routeConfig";
 import React, { Suspense } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
+  const loading = useSelector((state) => state.persist.loading.loading);
+  
   return (
     <BrowserRouter>
       <Suspense fallback={PreloaderNoProps}>
         <ScrollTop />
         <PopUpCurrentExam />
-
+        {loading && (
+          <div className="full-screen-loading">
+            <Spin spinning={loading} tip={"Loading..."}></Spin>
+          </div>
+        )}
         <Switch>
-          {/* RouteWithLoader */}
           <RouteBasicPage
             exact={Routes.LoginPage.exact}
             path={Routes.LoginPage.path}

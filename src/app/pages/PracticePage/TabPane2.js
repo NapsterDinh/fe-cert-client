@@ -9,6 +9,8 @@ import {
   Tabs,
   Typography,
   Spin,
+  Popconfirm,
+  Tooltip,
 } from "antd";
 import { createRandomTopicSession } from "app/core/apis/practice";
 import React, { useState } from "react";
@@ -44,7 +46,7 @@ const schema = yup
 const TabPane2 = ({ allTopic }) => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const user = useSelector((state) => state.persist.user?.user?.user);
+  const user = useSelector((state) => state.persist.user?.user);
   const currentDoingExam = useSelector(
     (state) => state?.exam?.currentDoingExam
   );
@@ -57,7 +59,6 @@ const TabPane2 = ({ allTopic }) => {
     reset,
     getValues,
     clearErrors,
-    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -67,10 +68,6 @@ const TabPane2 = ({ allTopic }) => {
       timeLimited: 900,
     },
   });
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
 
   const showModalPracticeOneTopic = (item) => {
     setValue("objectives", [item._id]);
@@ -107,8 +104,9 @@ const TabPane2 = ({ allTopic }) => {
         alert(response.error);
       }
     } catch (error) {}
-    console.log(values);
   };
+
+  console.log(user);
 
   return (
     <>
@@ -214,13 +212,38 @@ const TabPane2 = ({ allTopic }) => {
             >
               Cancel
             </Button>
-            <Button
-              disabled={isSubmitting || currentDoingExam?.exam !== undefined}
-              type="submit"
-              variant="primary"
-            >
-              Submit
-            </Button>
+            {currentDoingExam?.exam !== undefined ? (
+              <Tooltip title="You need to complete the previous test before taking this test again">
+                <Button disabled={isSubmitting} variant="primary">
+                  Submit
+                </Button>
+              </Tooltip>
+            ) : user === "" ? (
+              <Popconfirm
+                title="You need to login to use this feature. Login now ?"
+                onConfirm={() => (window.location = "/login")}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  disabled={
+                    isSubmitting || currentDoingExam?.exam !== undefined
+                  }
+                  type="submit"
+                  variant="primary"
+                >
+                  Submit
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Button
+                disabled={isSubmitting || currentDoingExam?.exam !== undefined}
+                type="submit"
+                variant="primary"
+              >
+                Submit
+              </Button>
+            )}
           </div>
         </Form>
       </Modal>

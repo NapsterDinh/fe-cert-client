@@ -99,7 +99,7 @@ const Checkout = () => {
           <div>
             <div className="summary-item">
               <span>Original price:</span>
-              <span>{data?.price}$</span>
+              <span>{data?.price?.$numberDecimal}$</span>
             </div>
             <div className="summary-item">
               <span>Discount price:</span>
@@ -109,7 +109,7 @@ const Checkout = () => {
           <Divider />
           <div className="summary-total">
             <span>Total:</span>
-            <span>{data?.price}$</span>
+            <span>{data?.price?.$numberDecimal}$</span>
           </div>
           <Button disabled={isSendAPI} onClick={handlePayment}>
             Proceed

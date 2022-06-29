@@ -3,13 +3,17 @@ import { Container } from "@themesberg/react-bootstrap";
 import StudyRoadItem from "app/components/StudyRoadItem";
 import { topicsDescription } from "app/data/topic";
 import { getAllTopic } from "app/core/apis/topic";
+import { Spin } from "antd";
+import { useDispatch } from "react-redux";
+import { updateLoading } from "app/store/loadingReducer";
 
 const StudyRoad = () => {
   const [data, setData] = useState("");
-
+  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
+        dispatch(updateLoading(true));
         const response = await getAllTopic();
         if (response?.status === 200) {
           setData(
@@ -25,6 +29,8 @@ const StudyRoad = () => {
         }
       } catch (error) {
         alert(error);
+      } finally {
+        dispatch(updateLoading(false));
       }
     })();
   }, []);

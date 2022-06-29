@@ -16,11 +16,11 @@ const OverviewPage = () => {
   const [predictNextResult, setPredictNextResult] = useState("");
   const [percentExam, setPercentExam] = useState("");
   const [percentPractice, setPercentPractice] = useState("");
-  const [percentMixingExamTest, setPercentMixingExamTest] = useState("");
+  // const [percentMixingExamTest, setPercentMixingExamTest] = useState("");
   useEffect(() => {
     (async () => {
       try {
-        const response = await getTopicStatistic("normal_practice");
+        // const response = await getTopicStatistic("normal_practice");
         const response1 = await getTopicStatistic("topic_practice");
         const response2 = await getTopicStatistic("exam");
         if (response2.status === 200 && response1.status === 200) {
@@ -76,27 +76,27 @@ const OverviewPage = () => {
             ),
           });
 
-          setPercentMixingExamTest({
-            ...response?.data?.exam,
-            topicsList: response?.data?.exam?.topicsList.map((item, index) => ({
-              title: item.title,
-              countCorrect: item.totalCorrect,
-              percentage:
-                item.totalQuestion !== 0
-                  ? parseInt(
-                      ((item.totalCorrect / item.totalQuestion) * 100).toFixed(
-                        0
-                      )
-                    )
-                  : 0,
-              color: "#" + Math.floor(Math.random() * 16777215).toString(16),
-              total: item.totalQuestion,
-              last:
-                index === response?.data?.exam?.topicsList?.length - 1
-                  ? true
-                  : false,
-            })),
-          });
+          // setPercentMixingExamTest({
+          //   ...response?.data?.exam,
+          //   topicsList: response?.data?.exam?.topicsList.map((item, index) => ({
+          //     title: item.title,
+          //     countCorrect: item.totalCorrect,
+          //     percentage:
+          //       item.totalQuestion !== 0
+          //         ? parseInt(
+          //             ((item.totalCorrect / item.totalQuestion) * 100).toFixed(
+          //               0
+          //             )
+          //           )
+          //         : 0,
+          //     color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+          //     total: item.totalQuestion,
+          //     last:
+          //       index === response?.data?.exam?.topicsList?.length - 1
+          //         ? true
+          //         : false,
+          //   })),
+          // });
         }
       } catch (error) {
         console.log(error);
@@ -108,11 +108,11 @@ const OverviewPage = () => {
       <Row className="justify-content-md-center mt-4 overview-container-page">
         <h3 className="my-4">Overview</h3>
         <Spin
-          spinning={percentMixingExamTest === ""}
+          spinning={percentPractice === ""}
           className="spin-doing-quiz"
           tip="Loading..."
         >
-          {percentMixingExamTest !== "" && (
+          {percentPractice !== "" && (
             <>
               {historyExam !== "" &&
                 historyExam !== [] &&
@@ -154,7 +154,7 @@ const OverviewPage = () => {
                           percentage={18.2}
                           icon={faChartLine}
                           iconColor="shape-secondary"
-                        />
+                        /> 
                       </Col>
                       <Col xs={12} sm={6} xl={3} className="mb-4">
                         <CounterWidget
@@ -251,7 +251,7 @@ const OverviewPage = () => {
                     />
                   </div>
                 </TabPane>
-                <TabPane tab="Mixing Exam Test statistic" key="3">
+                {/* <TabPane tab="Mixing Exam Test statistic" key="3">
                   <div className="statistic-component">
                     <h2>Mixing Exam Test statistic</h2>
                     <div className="d-flex justify-content-between">
@@ -313,7 +313,7 @@ const OverviewPage = () => {
                       }
                     />
                   </div>
-                </TabPane>
+                </TabPane> */}
               </Tabs>
 
               {/* <Col xs={12} sm={6} xl={4} className="mb-4">

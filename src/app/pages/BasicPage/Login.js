@@ -47,14 +47,19 @@ const LoginPage = () => {
 
     if (result.status === 200) {
       console.log(result);
-      //set token
-      configuration.setApiRequestToken(result.data.tokens);
-      
-      dispatch(updateUser(result.data));
-      if (location?.state !== undefined) {
-        history.push(`${location.state.from}${location.state.search}`);
+      if (result.data?.user?.user?.status === "inactive") {
+        setError("You are blocked by admin. Contact to unblock");
+        resetForm();
       } else {
-        history.push("/");
+        //set token
+        configuration.setApiRequestToken(result.data.tokens);
+
+        dispatch(updateUser(result.data));
+        if (location?.state !== undefined) {
+          history.push(`${location.state.from}${location.state.search}`);
+        } else {
+          history.push("/");
+        }
       }
     } else {
       setError(result?.data?.message);
@@ -179,7 +184,7 @@ const LoginPage = () => {
                               to={Routes.ForgotPassword.path}
                               className="small text-end"
                             >
-                              Lost password?
+                              Forgot password?
                             </Card.Link>
                           </div>
                         </Form.Group>

@@ -5,6 +5,8 @@ import { getLessonByID } from "app/core/apis/lessons";
 import React, { useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
 import { useLocation, useParams, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateLoading } from "app/store/loadingReducer";
 const dataTest = {
   currentSection: {
     id: "111",
@@ -620,9 +622,11 @@ const TutorialPage = () => {
   const { slugSection } = useParams();
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
+        dispatch(updateLoading(true));
         const response = await getLessonByID(slugSection);
         const temp = response?.data?.topicLesson[0];
         if (response?.status === 200) {
@@ -634,6 +638,8 @@ const TutorialPage = () => {
         }
       } catch (error) {
         alert(error);
+      } finally {
+        dispatch(updateLoading(false));
       }
     })();
   }, []);
@@ -691,14 +697,6 @@ const TutorialPage = () => {
           </div>
           <span className="span-reserved">Hope you enjoying my website</span>
           <div className="border"></div>
-          {/* <div className="next-article">
-          <div>
-            <p>Next section</p>
-            <a href={`/section${data?.nextSection?.slug}`}>
-              {data?.nextSection?.title}
-            </a>
-          </div>
-        </div> */}
         </Col>
         <Col className="layout-container-body tutorial">
           <PostIndex data={data} location={location} />

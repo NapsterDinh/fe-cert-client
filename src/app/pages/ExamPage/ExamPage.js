@@ -33,9 +33,6 @@ const ExamPage = () => {
   const [statistic, setStatistic] = useState("");
   const [show, setShow] = useState(false);
   const user = useSelector((state) => state.persist.user.user);
-
-  console.log(user);
-
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -52,7 +49,11 @@ const ExamPage = () => {
           window.location = "/404";
         }
         const response1 = await getAllExam("exam");
-        const response2 = await checkExamByIdAndUser(idExam, user?.user.id);
+        if (user?.user?.id !== undefined) {
+          const response2 = await checkExamByIdAndUser(idExam, user?.user.id);
+          setStatusDoingExam(response2?.data?.exam);
+        }
+
         const response5 = await getStatisticByIDExam(idExam);
         const reponse3 = await getHistoryByIdExam(idExam);
         setData(response?.data?.exam.exam[0]);
@@ -60,7 +61,7 @@ const ExamPage = () => {
           response1?.data?.exam.filter((item) => item._id !== idExam)
         );
         setStatistic(response5?.data?.exam);
-        setStatusDoingExam(response2?.data?.exam);
+
         setHistoryExam(reponse3?.data?.exam);
       } catch (error) {}
     })();
@@ -189,9 +190,6 @@ const ExamPage = () => {
               </h3>
               {user !== "" && (
                 <div className="my-4 d-flex justify-content-end">
-                  {/* {statusDoingExam?.total !== 0 && (
-                    <Button className="mx-3">View Test History</Button>
-                  )} */}
                   {statusDoingExam?.total >= 5 &&
                     user?.pricing?.abilities?.includes(
                       "62b290ea2c130943d42c8998"
@@ -230,7 +228,7 @@ const ExamPage = () => {
               </Col>
             </div>
             <div className="text-center">
-              {statusDoingExam?.total !== 0 && (
+              {user?.user?.id !== undefined && statusDoingExam?.total !== 0 && (
                 <p
                   style={{
                     color: "red",

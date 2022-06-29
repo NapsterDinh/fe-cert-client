@@ -11,10 +11,11 @@ import {
   useLocation,
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
+import './ThirdLogin.css'
 
 const clientId =
   "588336887447-h306o0g8rsfr9o2421d749sgk6hu916k.apps.googleusercontent.com";
-const appId = "388448022239409";
+const appId = "840430540176218";
 
 const ThirdLogin = () => {
   const dispatch = useDispatch();
@@ -63,14 +64,15 @@ const ThirdLogin = () => {
       <div className="mt-3 mb-4 text-center">
         <span className="fw-normal">or login with</span>
       </div>
-      <div className="d-flex justify-content-center my-4">
+      <div className="my-4">
         <FacebookLogin
           id="buttonFB"
           appId={appId}
           fields="name,email,picture"
           callback={responseFacebook}
           icon={<FontAwesomeIcon icon={faFacebook} />}
-          textButton={"Continue with Google"}
+          textButton={"Continue with Facebook"}
+          className="btn-login-fb"
         />
         <GoogleLogin
           clientId={clientId}

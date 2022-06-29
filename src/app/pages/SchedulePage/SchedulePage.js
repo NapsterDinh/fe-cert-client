@@ -1,11 +1,12 @@
 import { Button, Container, Modal } from "@themesberg/react-bootstrap";
+import { Checkbox, Tooltip, Popconfirm } from "antd";
 import { getAllExam } from "app/core/apis/exam";
 import { createPractice } from "app/core/apis/practice";
 import React, { useEffect, useState } from "react";
-import { Checkbox } from "antd";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-
 import TableExam from "./TablesExam/TablesExam";
+
 const CheckboxGroup = Checkbox.Group;
 
 const SchedulePage = () => {
@@ -16,6 +17,11 @@ const SchedulePage = () => {
   const [checkedList, setCheckedList] = useState([]);
   const [error, setError] = useState("");
   const history = useHistory();
+  const currentDoingExam = useSelector(
+    (state) => state?.exam?.currentDoingExam
+  );
+  const user = useSelector((state) => state.persist.user.user);
+  console.log(user);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -84,19 +90,25 @@ const SchedulePage = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                if (checkedList.length < 2) {
-                  setError("You need to choose at least 2 exam");
-                  return;
-                }
-                startPraticing();
-                handleClose();
-              }}
-            >
-              Submit
-            </Button>
+            {currentDoingExam?.exam !== undefined ? (
+              <Tooltip title="You need to complete the previous test before taking this test again">
+                <Button variant="primary">Submit</Button>
+              </Tooltip>
+            ) : (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  if (checkedList.length < 2) {
+                    setError("You need to choose at least 2 exam");
+                    return;
+                  }
+                  startPraticing();
+                  handleClose();
+                }}
+              >
+                Submit
+              </Button>
+            )}
           </Modal.Footer>
         </Modal>
       </>
@@ -106,9 +118,22 @@ const SchedulePage = () => {
       <div className="layout-container-body">
         <TableExam data={data} />
       </div>
-      <div className="d-flex justify-content-center my-4">
-        <Button onClick={() => handleShow()}>Doing Mixing Exam Tests</Button>
-      </div>
+      {user === "" ? (
+        <Popconfirm
+          title="You need to login to use this feature. Login now ?"
+          onConfirm={() => (window.location = "/login")}
+          okText="Yes"
+          cancelText="No"
+        >
+          <div className="d-flex justify-content-center my-4">
+            <Button>Doing Mixing Exam Tests</Button>
+          </div>
+        </Popconfirm>
+      ) : (
+        <div className="d-flex justify-content-center my-4">
+          <Button onClick={() => handleShow()}>Doing Mixing Exam Tests</Button>
+        </div>
+      )}
     </Container>
   );
 };

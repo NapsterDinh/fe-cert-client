@@ -2,20 +2,19 @@
 import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, message, Upload, Avatar } from "antd";
-import { generateAvatar } from "app/utils/StringUtils";
 import {
   Button,
   Dropdown,
   Image,
   Nav,
-  Navbar,
+  Navbar
 } from "@themesberg/react-bootstrap";
+import { Avatar } from "antd";
 import logo from "app/assets/icon/Logo.png";
-import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
 import configuration from "app/configuration";
 import NOTIFICATIONS_DATA from "app/data/notifications";
 import { updateUser } from "app/store/userReducer";
+import { generateAvatar } from "app/utils/StringUtils";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";

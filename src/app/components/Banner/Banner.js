@@ -18,7 +18,7 @@ import bannerBg from "app/assets/img/to-chuc-thi-scaled.jpg";
 import React from "react";
 import { useSelector } from "react-redux";
 import useBreadcrumb from "app/utils/useBreadCrumb";
-import { PageHeader, Breadcrumb } from "antd";
+import { PageHeader, Breadcrumb, Spin } from "antd";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import "./Banner.css";
 
@@ -75,7 +75,7 @@ export const BannerAnswerQuiz = () => {
   };
 
   return (
-    <>
+    <Spin spinning={exam === ""} tip="Loading..." size="large">
       <div
         style={{ backgroundImage: `url(${bannerBg})` }}
         className="banner-answer"
@@ -170,7 +170,7 @@ export const BannerAnswerQuiz = () => {
           </div>
         </div>
       </div>
-    </>
+    </Spin>
   );
 };
 

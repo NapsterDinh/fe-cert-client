@@ -4,21 +4,24 @@ import { ReactComponent as UnTickIcon } from "app/assets/icon/untick.svg";
 import React from "react";
 import { getAllPricing, getAllAbilityPricing } from "app/core/apis/pricing";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateLoading } from "app/store/loadingReducer";
 
 import "./PricingPage.css";
-import { Divider } from "antd";
 
 const PricingPage = () => {
   const [allPricing, setAllPricing] = React.useState([]);
   const [allAbilities, setAllAbilities] = React.useState([]);
   const [allPricingPublic, setAllPricingPublic] = React.useState([]);
   const user = useSelector((state) => state.persist.user?.user);
+
+  const dispatch = useDispatch();
   const history = useHistory();
 
   React.useEffect(() => {
     (async () => {
       try {
+        dispatch(updateLoading(true));
         const response1 = await getAllAbilityPricing();
         setAllAbilities(response1?.data?.ability);
         const response = await getAllPricing();
@@ -49,6 +52,8 @@ const PricingPage = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch(updateLoading(false));
       }
     })();
   }, []);
@@ -56,16 +61,18 @@ const PricingPage = () => {
   return (
     <>
       <Container className="d-flex justify-content-center mt-4 pricing-page-container">
-        {allPricing?.map((item) => (
-          <PricingItem
-            isUsing={user?.pricing?.pricing?._id === item?._id}
-            isPremium={true}
-            key={item._id}
-            item={item}
-            allAbilities={allAbilities}
-            history={history}
-          />
-        ))}
+        {allPricing?.map((item) => {
+          return (
+            <PricingItem
+              isUsing={user?.pricing?.pricing?._id === item?._id}
+              isPremium={true}
+              key={item._id}
+              item={item}
+              allAbilities={allAbilities}
+              history={history}
+            />
+          );
+        })}
       </Container>
       <div className="d-flex justify-content-center mt-4 compared-feature-container">
         <h1>Comparation between service package</h1>
@@ -110,28 +117,29 @@ const PricingPage = () => {
             <Col lg={4} className="td td-row-title"></Col>
             {allPricingPublic?.map((u) => (
               <Col className="text-center td th-title" key={`theader${u._id}`}>
-                {u.name === "Basic" && (
+                {u?.name === "Basic" ? (
                   <>
                     <Button className="btn-padding mt-3" disabled>
                       Default
                     </Button>
                     {u?.price !== 0 && <h3 className="mt-3">Free</h3>}
                   </>
-                )}
-                {u.name !== "Basic" && (
+                ) : user?.pricing?.pricing?._id === u?._id ? (
+                  <>
+                    <Button className="btn-padding mt-3" disabled>
+                      Using
+                    </Button>
+                    <h3 className="mt-3">{u?.price?.$numberDecimal + " $"}</h3>
+                  </>
+                ) : (
                   <>
                     <Button
-                      className="btn-padding mt-3"
-                      disabled={user?.pricing !== undefined}
                       onClick={() => history.push("/checkout/" + u?._id)}
+                      className="btn-padding mt-3"
                     >
-                      {user?.pricing === undefined ? "Buy now" : "Using"}
+                      Buy now
                     </Button>
-                    {u?.price !== 0 && (
-                      <h3 className="mt-3">
-                        {u?.price?.$numberDecimal + " $"}
-                      </h3>
-                    )}
+                    <h3 className="mt-3">{u?.price?.$numberDecimal + " $"}</h3>
                   </>
                 )}
               </Col>
@@ -169,23 +177,16 @@ const PricingItem = ({
           <h1 className="price">
             {item?.price === 0 ? "Free" : item?.price?.$numberDecimal + " $"}
           </h1>
-          {item?.status !== "coming_soon" && item?.name !== "Basic" && (
+          {item?.name === "Basic" ? (
+            <Button disabled>Default</Button>
+          ) : isUsing ? (
+            <Button disabled>Using</Button>
+          ) : (
             <Button
-              disabled={user?.pricing !== undefined}
               onClick={() => history.push("/checkout/" + item?._id)}
               className
             >
-              {user?.pricing === undefined ? "Buy now" : "Using"}
-            </Button>
-          )}
-
-          {item?.status !== "coming_soon" && item?.name === "Basic" && (
-            <Button
-              disabled
-              onClick={() => history.push("/checkout/" + item?._id)}
-              className
-            >
-              Using
+              Buy now
             </Button>
           )}
 

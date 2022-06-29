@@ -16,6 +16,7 @@ const RouteWithLoader = ({ component: Component, ...rest }) => {
 };
 
 export const RouteWithSidebar = ({ component: Component, ...rest }) => {
+
   return (
     <Route
       {...rest}

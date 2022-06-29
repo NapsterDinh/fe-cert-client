@@ -26,28 +26,17 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>React App</title>
+  <title>FE VietNam</title>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-
-  <!-- Messenger Plugin chat Code
-  <div id="fb-root"></div> -->
+  <!-- Messenger Plugin chat Code -->
+  <div id="fb-root"></div>
 
   <!-- Your Plugin chat code -->
-  <!-- <div id="fb-customer-chat" class="fb-customerchat">
+  <div id="fb-customer-chat" class="fb-customerchat">
   </div>
 
   <script>
@@ -56,9 +45,12 @@
     chatbox.setAttribute("attribution", "biz_inbox");
   </script>
 
+  <!-- Your SDK code -->
   <script>
     window.fbAsyncInit = function() {
       FB.init({
+        appId: "840430540176218",
+        status: true,
         xfbml            : true,
         version          : 'v14.0'
       });
@@ -71,7 +63,7 @@
       js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-  </script> -->
+  </script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@ import {
   Row,
   Table,
 } from "@themesberg/react-bootstrap";
-import { Alert, Tabs, Tag, Tooltip } from "antd";
+import { Alert, Tabs, Tag, Tooltip, Spin } from "antd";
 import Chart from "app/components/Chart/Chart";
 import { ProgressTrackWidget } from "app/components/Widgets";
 import { getResultByIdUserExam } from "app/core/apis/exam";
@@ -35,10 +35,12 @@ const AnswerQuiz = () => {
       ? 1
       : parseInt(new URLSearchParams(location.search).get("question"));
   let { hashIdExamSession } = useParams();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
+        setLoading(true);
         const response = await getResultByIdUserExam({
           userExam: hashIdExamSession,
         });
@@ -69,6 +71,8 @@ const AnswerQuiz = () => {
         setTopic(response1?.data?.topic);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -123,129 +127,144 @@ const AnswerQuiz = () => {
 
   return (
     <>
-      <Container className="d-flex container-card">
-        <Tabs
-          defaultActiveKey="1"
-          destroyInactiveTabPane
-          className="tabs-answer"
-        >
-          <TabPane tab="Detail Answer Quiz" key="1">
-            <Row className="d-flex mt-3">
-              <Col className="layout-container-body answer quiz">
-                <QuestionList data={data} currentOrder={currentOrder} />
-              </Col>
-              <Col className="layout-container-top quiz">
-                <DetailQuestion
-                  item={questionShow}
-                  currentOrder={currentOrder}
-                  data={data}
-                  setData={setData}
-                />
-              </Col>
-            </Row>
-            l
-          </TabPane>
-          <TabPane tab="Answer result statistics" key="2">
-            <Row>
-              <div style={{ marginBottom: "20px", marginTop: "20px" }}>
-                <h3>Topic division</h3>
-                <Chart
-                  width={500}
-                  {...countPercentTopicInExam(data?.questions, topic)}
-                />
-              </div>
-              <div style={{ marginBottom: "20px" }}>
-                <h3>Answer rate</h3>
-                <Chart
-                  width={400}
-                  {...countPercentAnswerRate(
-                    data?.questions,
-                    data?.submissions
-                  )}
-                />
-              </div>
-              {data?.questions !== undefined &&
-                topic.length !== 0 &&
-                data?.submissions !== undefined && (
-                  <ProgressTrackWidget
-                    data={countAnswerRatePerTopic(
-                      data?.questions,
-                      topic,
-                      data?.submissions
-                    )}
+      <Spin tip="Loading..." size={"large"} spinning={loading}>
+        <Container className="d-flex container-card">
+          <Tabs
+            defaultActiveKey="1"
+            destroyInactiveTabPane
+            className="tabs-answer"
+          >
+            <TabPane tab="Detail Answer Quiz" key="1">
+              <Row className="d-flex mt-3">
+                <Col className="layout-container-body answer quiz">
+                  <QuestionList data={data} currentOrder={currentOrder} />
+                </Col>
+                <Col className="layout-container-top quiz">
+                  <DetailQuestion
+                    item={questionShow}
+                    currentOrder={currentOrder}
+                    data={data}
+                    setData={setData}
                   />
-                )}
-              <Table striped bordered hover className="my-4">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Result</th>
-                    <th>Question</th>
-                    <th>Topic</th>
-                    <th style={{ textAlign: "center" }}>Relative Document</th>
-                  </tr>
-                </thead>
-                <tbody className="result-report">
-                  {data?.submissions?.map((item, index) => {
-                    const temp = data?.questions.find(
-                      (t) => item.question_id === t._id
-                    );
-                    let result = "";
-                    if (item?.answers === "") {
-                      result = "No Answer";
-                    } else {
-                      if (item.correct) {
-                        result = "Correct";
-                      } else {
-                        result = "Incorrect";
-                      }
-                    }
-                    return (
-                      <tr key={item._id}>
-                        <td>{index + 1}</td>
-                        <td className="td-correct-wrong">
-                          {result === "No Answer" && (
-                            <Tag color="#108ee9">{result}</Tag>
-                          )}
-                          {result === "Correct" && (
-                            <Tag color="#87d068">{result}</Tag>
-                          )}
-                          {result === "Incorrect" && (
-                            <Tag color="#f50">{result}</Tag>
-                          )}
-                        </td>
-                        <td className="td-question">
-                          <Tooltip
-                            title={temp.question
-                              .replaceAll(/<\/?[^>]+(>|$)/g, "")
-                              .replaceAll(`&nbsp;`, " ")}
-                          >
-                            {temp.question
-                              .replaceAll(/<\/?[^>]+(>|$)/g, "")
-                              .replaceAll(`&nbsp;`, " ")}
-                          </Tooltip>
-                        </td>
-                        <td>
-                          {topic?.find((t) => t._id === temp.topic)?.title}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          <a
-                            href={`/lessons/${temp.lesson}`}
-                            target={"_blank"}
-                            rel="noreferrer"
-                          >
-                            Go to document
-                          </a>
-                        </td>
+                </Col>
+              </Row>
+              l
+            </TabPane>
+            <TabPane tab="Answer result statistics" key="2">
+              {user?.pricing?.abilities?.includes(
+                "62b290ea2c130943d42c8997"
+              ) ? (
+                <Row>
+                  <div style={{ marginBottom: "20px", marginTop: "20px" }}>
+                    <h3>Topic division</h3>
+                    <Chart
+                      width={500}
+                      {...countPercentTopicInExam(data?.questions, topic)}
+                    />
+                  </div>
+                  <div style={{ marginBottom: "20px" }}>
+                    <h3>Answer rate</h3>
+                    <Chart
+                      width={400}
+                      {...countPercentAnswerRate(
+                        data?.questions,
+                        data?.submissions
+                      )}
+                    />
+                  </div>
+                  {data?.questions !== undefined &&
+                    topic.length !== 0 &&
+                    data?.submissions !== undefined && (
+                      <ProgressTrackWidget
+                        data={countAnswerRatePerTopic(
+                          data?.questions,
+                          topic,
+                          data?.submissions
+                        )}
+                      />
+                    )}
+                  <Table striped bordered hover className="my-4">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Result</th>
+                        <th>Question</th>
+                        <th>Topic</th>
+                        <th style={{ textAlign: "center" }}>
+                          Relative Document
+                        </th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Row>
-          </TabPane>
-        </Tabs>
-      </Container>
+                    </thead>
+                    <tbody className="result-report">
+                      {data?.submissions?.map((item, index) => {
+                        const temp = data?.questions.find(
+                          (t) => item.question_id === t._id
+                        );
+                        let result = "";
+                        if (item?.answers === "") {
+                          result = "No Answer";
+                        } else {
+                          if (item.correct) {
+                            result = "Correct";
+                          } else {
+                            result = "Incorrect";
+                          }
+                        }
+                        return (
+                          <tr key={item._id}>
+                            <td>{index + 1}</td>
+                            <td className="td-correct-wrong">
+                              {result === "No Answer" && (
+                                <Tag color="#108ee9">{result}</Tag>
+                              )}
+                              {result === "Correct" && (
+                                <Tag color="#87d068">{result}</Tag>
+                              )}
+                              {result === "Incorrect" && (
+                                <Tag color="#f50">{result}</Tag>
+                              )}
+                            </td>
+                            <td className="td-question">
+                              <Tooltip
+                                title={temp.question
+                                  .replaceAll(/<\/?[^>]+(>|$)/g, "")
+                                  .replaceAll(`&nbsp;`, " ")}
+                              >
+                                {temp.question
+                                  .replaceAll(/<\/?[^>]+(>|$)/g, "")
+                                  .replaceAll(`&nbsp;`, " ")}
+                              </Tooltip>
+                            </td>
+                            <td>
+                              {topic?.find((t) => t._id === temp.topic)?.title}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              <a
+                                href={`/lessons/${temp.lesson}`}
+                                target={"_blank"}
+                                rel="noreferrer"
+                              >
+                                Go to document
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                </Row>
+              ) : (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "400px" }}
+                >
+                  <Button>Upgrade your account to use our service</Button>
+                </div>
+              )}
+            </TabPane>
+          </Tabs>
+        </Container>
+      </Spin>
     </>
   );
 };
@@ -344,6 +363,11 @@ const DetailQuestion = ({
           dangerouslySetInnerHTML={{ __html: item?.question }}
         ></div>
         <hr></hr>
+        {!user?.pricing?.abilities?.includes("62b290ea2c130943d42c8995") && (
+          <h6 className="text-center" style={{ color: "red" }}>
+            Upgrade your account to see right answer
+          </h6>
+        )}
         {/* <span>Choose the correct answer</span> */}
         <ul className="choose-answer answer-mode">
           {item?.choices?.map((item1, index1) => (
@@ -351,10 +375,14 @@ const DetailQuestion = ({
               key={item1._id}
               className={
                 data?.questions?.find((t) => t._id === item._id)?.answer ===
-                  item1._id && "correct-choice"
+                  item1._id &&
+                user?.pricing?.abilities?.includes(
+                  "62b290ea2c130943d42c8995"
+                ) &&
+                "correct-choice"
               }
             >
-              {!user?.pricing?.abilities?.includes(
+              {/* {!user?.pricing?.abilities?.includes(
                 "62b290ea2c130943d42c8995"
               ) ? (
                 <FormCheck
@@ -374,7 +402,17 @@ const DetailQuestion = ({
                   type="radio"
                   id={`inline-radio-${item1._id}`}
                 />
-              )}
+              )} */}
+              <FormCheck
+                defaultChecked={
+                  data?.submissions?.find((t) => t.question_id === item._id)
+                    ?.answers === item1._id
+                }
+                label={item1.label}
+                name={`group${item._id}`}
+                type="radio"
+                id={`inline-radio-${item1._id}`}
+              />
             </li>
           ))}
         </ul>
@@ -395,9 +433,11 @@ const DetailQuestion = ({
                       <div
                         style={{ maxWidth: "810px" }}
                         className="question-content normal"
-                        dangerouslySetInnerHTML={{ __html: item?.explanation }}
+                        dangerouslySetInnerHTML={{
+                          __html: item?.explanation,
+                        }}
                       ></div>
-                      <Button>Update your account to our service</Button>
+                      <Button>Upgrade your account to use our service</Button>
                     </>
                   ) : (
                     <div
