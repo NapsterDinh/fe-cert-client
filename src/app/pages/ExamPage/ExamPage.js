@@ -191,9 +191,10 @@ const ExamPage = () => {
               {user !== "" && (
                 <div className="my-4 d-flex justify-content-end">
                   {statusDoingExam?.total >= 5 &&
-                    user?.pricing?.abilities?.includes(
+                    (user?.pricing?.abilities?.includes(
                       "62b290ea2c130943d42c8998"
-                    ) && (
+                    ) ||
+                      user?.user?.role?.name === "admin") && (
                       <Button
                         variant="secondary"
                         onClick={handlePredicNextResult}

@@ -11,7 +11,7 @@ import {
   useLocation,
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
-import './ThirdLogin.css'
+import "./ThirdLogin.css";
 
 const clientId =
   "588336887447-h306o0g8rsfr9o2421d749sgk6hu916k.apps.googleusercontent.com";
@@ -54,10 +54,12 @@ const ThirdLogin = () => {
           history.push("/");
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const onFailure = (response) => {};
+  const onFailure = (response) => console.log(response);
 
   return (
     <>
@@ -77,11 +79,7 @@ const ThirdLogin = () => {
         <GoogleLogin
           clientId={clientId}
           render={(renderProps) => (
-            <Button
-              className="socialBtn"
-              block
-              onClick={renderProps.onClick}
-            >
+            <Button className="socialBtn" block onClick={renderProps.onClick}>
               {<FontAwesomeIcon icon={faGoogle} />}
               Continue with Google
             </Button>

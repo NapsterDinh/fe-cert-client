@@ -14,6 +14,7 @@ const PricingPage = () => {
   const [allAbilities, setAllAbilities] = React.useState([]);
   const [allPricingPublic, setAllPricingPublic] = React.useState([]);
   const user = useSelector((state) => state.persist.user?.user);
+  console.log(user);
 
   const dispatch = useDispatch();
   const history = useHistory();

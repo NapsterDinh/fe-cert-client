@@ -37,6 +37,8 @@ const AnswerQuiz = () => {
   let { hashIdExamSession } = useParams();
   const [loading, setLoading] = useState(false);
 
+  console.log(user);
+
   useEffect(() => {
     (async () => {
       try {
@@ -151,9 +153,8 @@ const AnswerQuiz = () => {
               l
             </TabPane>
             <TabPane tab="Answer result statistics" key="2">
-              {user?.pricing?.abilities?.includes(
-                "62b290ea2c130943d42c8997"
-              ) ? (
+              {user?.pricing?.abilities?.includes("62b290ea2c130943d42c8997") ||
+              user?.user?.role?.name === "admin" ? (
                 <Row>
                   <div style={{ marginBottom: "20px", marginTop: "20px" }}>
                     <h3>Topic division</h3>
@@ -376,9 +377,10 @@ const DetailQuestion = ({
               className={
                 data?.questions?.find((t) => t._id === item._id)?.answer ===
                   item1._id &&
-                user?.pricing?.abilities?.includes(
+                (user?.pricing?.abilities?.includes(
                   "62b290ea2c130943d42c8995"
-                ) &&
+                ) ||
+                  user?.user?.role?.name === "admin") &&
                 "correct-choice"
               }
             >
@@ -429,16 +431,24 @@ const DetailQuestion = ({
                   {!user?.pricing?.abilities?.includes(
                     "62b290ea2c130943d42c8996"
                   ) ? (
-                    <>
+                    user?.user?.role?.name !== "admin" ? (
+                      <>
+                        <div
+                          style={{ maxWidth: "810px" }}
+                          className="question-content normal"
+                          dangerouslySetInnerHTML={{
+                            __html: item?.explanation,
+                          }}
+                        ></div>
+                        <Button>Upgrade your account to use our service</Button>
+                      </>
+                    ) : (
                       <div
                         style={{ maxWidth: "810px" }}
-                        className="question-content normal"
-                        dangerouslySetInnerHTML={{
-                          __html: item?.explanation,
-                        }}
+                        className="question-content"
+                        dangerouslySetInnerHTML={{ __html: item?.explanation }}
                       ></div>
-                      <Button>Upgrade your account to use our service</Button>
-                    </>
+                    )
                   ) : (
                     <div
                       style={{ maxWidth: "810px" }}
