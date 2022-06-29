@@ -2,7 +2,6 @@ import { getStatementHistoryByIdUser } from "app/core/apis/pricing";
 import React, { useEffect, useState } from "react";
 import TableStatementHistory from "./TableStatementHistory/TableStatementHistory";
 
-
 export const StatementHistory = () => {
   const [data, setData] = useState("");
 
@@ -25,7 +24,8 @@ export const StatementHistory = () => {
                 index: index,
                 service: item?.pricing?.name,
                 price: item?.price?.$numberDecimal,
-                duration: item?.pricing?.duration
+                duration: item?.pricing?.duration,
+                status: index !== 0 ? "invalid" : "valid",
               }))
           );
         }

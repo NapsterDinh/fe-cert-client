@@ -204,17 +204,17 @@ export const TableStatementHistory = ({ data }) => {
       sortDirections: ["descend", "ascend"],
       render: (status) => {
         return (
-          <Tag color={status === "Done" ? "#87d068" : "#f50"}>{status}</Tag>
+          <Tag color={status === "valid" ? "#87d068" : "#f50"}>{status}</Tag>
         );
       },
       filters: [
         {
-          text: "Done",
-          value: "Done",
+          text: "valid",
+          value: "valid",
         },
         {
-          text: "Done",
-          value: "Done",
+          text: "invalid",
+          value: "invalid",
         },
       ],
       onFilter: (value, record) => record.status.indexOf(value) === 0,

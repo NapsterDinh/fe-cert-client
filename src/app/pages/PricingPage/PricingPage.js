@@ -15,7 +15,10 @@ const PricingPage = () => {
   const [allPricingPublic, setAllPricingPublic] = React.useState([]);
   const user = useSelector((state) => state.persist.user?.user);
   console.log(user);
-
+  console.log(
+    user?.pricing?.pricing?._id !== undefined &&
+      new Date(user?.pricing?.expireDate).getTime() > new Date().getTime()
+  );
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -132,6 +135,15 @@ const PricingPage = () => {
                     </Button>
                     <h3 className="mt-3">{u?.price?.$numberDecimal + " $"}</h3>
                   </>
+                ) : user?.pricing?.pricing?._id !== undefined &&
+                  new Date(user?.pricing?.expireDate).getTime() >
+                    new Date().getTime() ? (
+                  <>
+                    <Button disabled className="btn-padding mt-3">
+                      Cannot buy
+                    </Button>
+                    <h3 className="mt-3">{u?.price?.$numberDecimal + " $"}</h3>
+                  </>
                 ) : (
                   <>
                     <Button
@@ -182,6 +194,12 @@ const PricingItem = ({
             <Button disabled>Default</Button>
           ) : isUsing ? (
             <Button disabled>Using</Button>
+          ) : user?.pricing?.pricing?._id !== undefined &&
+            new Date(user?.pricing?.expireDate).getTime() >
+              new Date().getTime() ? (
+            <Button disabled className>
+              Cannot buy
+            </Button>
           ) : (
             <Button
               onClick={() => history.push("/checkout/" + item?._id)}

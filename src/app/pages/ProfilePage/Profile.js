@@ -1,23 +1,24 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Col, Container, Nav, Row } from "@themesberg/react-bootstrap";
-import { Divider, message, Upload, Avatar } from "antd";
-import dogGif from "app/assets/gif/dogLoading.gif";
+import { Avatar, Divider, message, Tooltip } from "antd";
+import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
 import Banner from "app/components/Banner/Banner";
 import { Routes } from "app/routes";
-import React, { useState } from "react";
+import { generateAvatar } from "app/utils/StringUtils";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Route, Switch } from "react-router-dom";
-import PracticeResult from "./PracticeResult/PracticeResult";
-import Profile3 from "app/assets/img/team/profile-picture-3.jpg";
-import StatementHistory from "./StatementHistory/StatementHistory";
-import MixingExamTest from "../SchedulePage/MixingExamTest/MixingExamTest";
-import { generateAvatar } from "app/utils/StringUtils";
 import "./Profile.css";
+import StatementHistory from "./StatementHistory/StatementHistory";
 import TestResult from "./TestResult/TestResult";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { getAllAbilityPricing } from "app/core/apis/pricing";
 
 const ProfilePage = ({ name }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [listAbilities, setListAbilities] = useState([]);
   const user = useSelector((state) => state.persist.user?.user);
   console.log(user);
   const handleChange = (info) => {
@@ -45,6 +46,14 @@ const ProfilePage = ({ name }) => {
       ></div>
     </div>
   );
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getAllAbilityPricing();
+        setListAbilities(response?.data?.ability);
+      } catch (error) {}
+    })();
+  }, []);
   return (
     <>
       <Banner name={name} />
@@ -74,21 +83,53 @@ const ProfilePage = ({ name }) => {
                 style={{ flexDirection: "column" }}
               >
                 <h2 style={{ width: "100%" }}>{user?.user?.name}</h2>
-                {user?.pricing !== undefined && (
-                  <div>
+                {user?.user?.role?.name === "admin" ? (
+                  <Tooltip
+                    title={() => {
+                      return listAbilities?.map((item) => (
+                        <p style={{ marginBottom: "0px" }}>{item?.name}</p>
+                      ));
+                    }}
+                  >
                     <h4>
-                      Pricing:{" "}
-                      <strong style={{ fontWeight: "700" }}>
-                        {user?.pricing?.pricing?.name}
-                      </strong>
+                      Admin <FontAwesomeIcon icon={faCircleQuestion} />
                     </h4>
-                    <p>
-                      Expired time:{" "}
-                      <strong style={{ fontWeight: "700" }}>
-                        {new Date(user?.pricing?.expireDate).toLocaleString()}{" "}
-                      </strong>
-                    </p>
-                  </div>
+                  </Tooltip>
+                ) : (
+                  user?.pricing !== undefined && (
+                    <div>
+                      <h4>
+                        Pricing:{" "}
+                        <strong
+                          style={{ fontWeight: "700", marginRight: "10px" }}
+                        >
+                          {user?.pricing?.pricing?.name}
+                        </strong>
+                        <Tooltip
+                          title={() => {
+                            return user?.pricing?.abilities?.map((item) => {
+                              const temp = listAbilities?.find(
+                                (t) => t?._id === item
+                              );
+                              return (
+                                <p style={{ marginBottom: "0px" }}>
+                                  {temp?.name}
+                                </p>
+                              );
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faCircleQuestion} />
+                        </Tooltip>
+                      </h4>
+                      <p>
+                        Expired time:{" "}
+                        <strong style={{ fontWeight: "700" }}>
+                          {new Date(user?.pricing?.expireDate).toLocaleString()}{" "}
+                        </strong>
+                      </p>
+                    </div>
+                  )
                 )}
               </div>
             </Col>
